@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="A virtual beer glass. Hold the tap to fill it, then tip your phone back to drink.">
+<meta name="theme-color" content="#1C3A2F">
+<style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>Pocket Pint</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Layout: one screen. Tiled pub wall on top with the wordmark and tally, the glass
+   stands on the bar under a brass tap, and the bar itself holds the readout and
+   the pour button at thumb height. */
+:root{
+  --wall:#E4EEE3; --grout:#D2E0D4; --ink:#17352B; --muted:#4D685D;
+  --bar:#1C3A2F; --bar-edge:#2F5846; --on-bar:#F6EED8; --on-bar-muted:#A9C2B4;
+  --beer:#EFAA1A; --beer-deep:#BF6F0A; --foam:#FFF7E0;
+  --brass:#C39A3A; --brass-hi:#F0D88C; --brass-lo:#8A6A1E;
+  --glass:rgba(23,53,43,.5); --glass-fill:rgba(255,255,255,.42);
+  --shine:rgba(255,255,255,.75); --etch:rgba(23,53,43,.62);
+  --btn:#EFAA1A; --btn-ink:#22220F; --btn-shadow:#9A5A06; --focus:#FFF7E0;
+  --display:"Alfa Slab One",Rockwell,"Roboto Slab",Georgia,serif;
+  --text:"Barlow Semi Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --wall:#11281F; --grout:#183529; --ink:#F3EAD2; --muted:#9CB6A8;
+    --bar:#091812; --bar-edge:#1D3A2E; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
+    --beer:#F2B02A; --beer-deep:#B5650A; --foam:#FFF4D6;
+    --brass:#CFA548; --brass-hi:#F2DC95; --brass-lo:#7C5E1A;
+    --glass:rgba(243,234,210,.55); --glass-fill:rgba(255,255,255,.05);
+    --shine:rgba(255,255,255,.3); --etch:rgba(255,250,235,.82);
+    --btn:#F2B02A; --btn-ink:#1B1A0A; --btn-shadow:#8A5206; --focus:#FFF4D6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --wall:#11281F; --grout:#183529; --ink:#F3EAD2; --muted:#9CB6A8;
+  --bar:#091812; --bar-edge:#1D3A2E; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
+  --beer:#F2B02A; --beer-deep:#B5650A; --foam:#FFF4D6;
+  --brass:#CFA548; --brass-hi:#F2DC95; --brass-lo:#7C5E1A;
+  --glass:rgba(243,234,210,.55); --glass-fill:rgba(255,255,255,.05);
+  --shine:rgba(255,255,255,.3); --etch:rgba(255,250,235,.82);
+  --btn:#F2B02A; --btn-ink:#1B1A0A; --btn-shadow:#8A5206; --focus:#FFF4D6;
+  color-scheme:dark;
+}
+
+html{height:100%;box-sizing:border-box}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  height:100%;margin:0;background:var(--wall);color:var(--ink);
+  font-family:var(--text);font-size:1rem;line-height:1.35;
+  overscroll-behavior:none;-webkit-text-size-adjust:100%;
+}
+.pub{
+  height:100%;min-height:26rem;display:grid;grid-template-rows:auto minmax(11rem,1fr) auto;
+  background:
+    linear-gradient(var(--grout) 2px,transparent 2px) 0 0/100% 3.5rem,
+    linear-gradient(90deg,var(--grout) 2px,transparent 2px) 0 0/7rem 3.5rem,
+    var(--wall);
+}
+.top{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  width:100%;max-width:35rem;margin-inline:auto;padding-block:.9rem .25rem;padding-inline:16px;
+}
+.mark{margin:0;font-family:var(--display);font-weight:400;font-size:1.6rem;line-height:1;letter-spacing:.01em;text-wrap:balance}
+.tally{margin:0;display:flex;align-items:baseline;gap:.5rem}
+.tally-label{font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tally-num{font-family:var(--display);font-size:1.6rem;line-height:1;font-variant-numeric:tabular-nums}
+
+.stage{position:relative;min-height:0;min-width:0}
+#glass{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#glass.dragging{cursor:grabbing}
+
+.deck{background:var(--bar);color:var(--on-bar)}
+.deck-inner{
+  width:100%;max-width:35rem;margin-inline:auto;padding-block:.35rem 1rem;padding-inline:16px;
+  display:flex;flex-direction:column;gap:.8rem;
+}
+.read{display:flex;align-items:center;gap:1rem}
+.vol{margin:0;flex:none;min-width:5.6rem;font-family:var(--display);font-size:2.3rem;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.unit{font-family:var(--text);font-weight:700;font-size:.95rem;letter-spacing:.06em;color:var(--on-bar-muted);margin-left:.3rem}
+.status{margin:0;flex:1;min-width:0;min-height:2.7em;display:flex;align-items:center;font-weight:500;font-size:1.02rem;color:var(--on-bar-muted)}
+
+.pour{
+  appearance:none;border:0;width:100%;padding:1.05rem 1rem;border-radius:.85rem;
+  background:var(--btn);color:var(--btn-ink);box-shadow:0 .4rem 0 var(--btn-shadow);
+  font-family:var(--display);font-size:1.3rem;letter-spacing:.02em;line-height:1;cursor:pointer;
+  margin-bottom:.4rem;touch-action:none;-webkit-user-select:none;user-select:none;
+  -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  transition:transform .08s ease,box-shadow .08s ease;
+}
+.pour.down{transform:translateY(.28rem);box-shadow:0 .12rem 0 var(--btn-shadow)}
+.pour:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.pour{transition:none}}
+</style>
+</head>
+<body>
+<main class="pub">
+  <header class="top">
+    <h1 class="mark">Pocket Pint</h1>
+    <p class="tally"><span class="tally-label">Pints sunk</span><span class="tally-num" id="tally">0</span></p>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="glass" role="img" aria-label="A beer glass standing on the bar under a brass tap"></canvas>
+  </div>
+
+  <footer class="deck">
+    <div class="deck-inner">
+      <div class="read">
+        <p class="vol"><span id="ml">0</span><span class="unit">ml</span></p>
+        <p class="status" id="status" aria-live="polite">Hold the tap to fill the glass.</p>
+      </div>
+      <button class="pour" id="pour" type="button">Hold to pour</button>
+    </div>
+  </footer>
+</main>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- glass geometry, in glass units (origin at the glass centre, y down) ---------- */
+var HH = 1.45, FULL_ML = 568, LINE_ML = 500, POUR_RATE = 130;
+var POLY = [[0.93,-1.45],[1,-0.87],[0.98,-0.145],[0.72,1.33],[0.6,1.45],
+            [-0.6,1.45],[-0.72,1.33],[-0.98,-0.145],[-1,-0.87],[-0.93,-1.45]];
+var RIM_L = [-0.93,-1.45], RIM_R = [0.93,-1.45];
+var BASE = [[-0.6,1.45],[0.6,1.45],[0.65,1.6],[0.6,1.69],[-0.6,1.69],[-0.65,1.6]];
+var FOOT = BASE.concat([RIM_L, RIM_R]);
+
+function clip(poly, gx, gy, c){            // keep the part where p·g >= c
+  var out = [], n = poly.length;
+  for (var i = 0; i < n; i++){
+    var a = poly[i], b = poly[(i+1)%n];
+    var da = a[0]*gx + a[1]*gy - c, db = b[0]*gx + b[1]*gy - c;
+    if (da >= 0) out.push(a);
+    if ((da >= 0) !== (db >= 0)){
+      var t = da/(da-db);
+      out.push([a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]);
+    }
+  }
+  return out;
+}
+function area(p){
+  var s = 0, n = p.length;
+  for (var i = 0; i < n; i++){ var a = p[i], b = p[(i+1)%n]; s += a[0]*b[1] - b[0]*a[1]; }
+  return Math.abs(s)/2;
+}
+function range(gx, gy){
+  var lo = Infinity, hi = -Infinity;
+  for (var i = 0; i < POLY.length; i++){ var d = POLY[i][0]*gx + POLY[i][1]*gy; if (d < lo) lo = d; if (d > hi) hi = d; }
+  return [lo, hi];
+}
+function levelFor(target, gx, gy){          // plane offset that holds `target` area below it
+  var r = range(gx, gy), lo = r[0], hi = r[1];
+  if (target <= 0) return hi;
+  for (var i = 0; i < 22; i++){
+    var mid = (lo+hi)/2;
+    if (area(clip(POLY, gx, gy, mid)) > target) lo = mid; else hi = mid;
+  }
+  return (lo+hi)/2;
+}
+function retainAt(angle){                   // area the glass can hold at this tilt
+  var gx = Math.sin(angle), gy = Math.cos(angle);
+  var c = Math.max(RIM_L[0]*gx + RIM_L[1]*gy, RIM_R[0]*gx + RIM_R[1]*gy);
+  return area(clip(POLY, gx, gy, c));
+}
+function insidePoly(x, y){
+  var sign = 0, n = POLY.length;
+  for (var i = 0; i < n; i++){
+    var a = POLY[i], b = POLY[(i+1)%n];
+    var cr = (b[0]-a[0])*(y-a[1]) - (b[1]-a[1])*(x-a[0]);
+    if (cr !== 0){ var s = cr > 0 ? 1 : -1; if (sign === 0) sign = s; else if (s !== sign) return false; }
+  }
+  return true;
+}
+var ML = FULL_ML / area(POLY);              // millilitres per unit of area
+var LINE_Y = levelFor(LINE_ML/ML, 0, 1);    // height of the 0,5 l mark
+
+function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+function wrap(a){ while (a > Math.PI) a -= 2*Math.PI; while (a <= -Math.PI) a += 2*Math.PI; return a; }
+function hexA(hex, a){
+  var h = hex.replace('#','');
+  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  var n = parseInt(h, 16);
+  if (isNaN(n)) return hex;
+  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+}
+
+/* ---------- elements ---------- */
+var stage = document.getElementById('stage');
+var canvas = document.getElementById('glass');
+var ctx = canvas.getContext('2d');
+var elMl = document.getElementById('ml');
+var elStatus = document.getElementById('status');
+var elTally = document.getElementById('tally');
+var btn = document.getElementById('pour');
+var calm = false;
+try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
+var touchy = false;
+try { touchy = window.matchMedia('(pointer: coarse)').matches; } catch(e){}
+
+/* ---------- theme tokens for the canvas ---------- */
+var T = {};
+function readTokens(){
+  var s = getComputedStyle(document.documentElement);
+  function g(n){ return s.getPropertyValue(n).trim(); }
+  T = { bar:g('--bar'), barEdge:g('--bar-edge'), beer:g('--beer'), beerDeep:g('--beer-deep'), foam:g('--foam'),
+        brass:g('--brass'), brassHi:g('--brass-hi'), brassLo:g('--brass-lo'),
+        glass:g('--glass'), glassFill:g('--glass-fill'), shine:g('--shine'), etch:g('--etch') };
+}
+readTokens();
+try {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', readTokens);
+  new MutationObserver(readTokens).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme','class','style']});
+} catch(e){}
+
+/* ---------- state ---------- */
+var beer = 190, foam = 42, peak = 0, count = 0;
+var pouring = false, flow = 0;
+var glassAngle = 0, dragTarget = 0, keyTilt = 0, drag = null;
+var liq = 0, liqVel = 0, planeAngle = 0, spillVis = 0, doneAt = -1e9;
+var bubbles = [], spawnAcc = 0;
+var sensor = { on:false, gx:0, gy:1 };
+var W = 0, H = 0, dpr = 1, u = 60, cx = 0, cyRest = 0, barY = 0, spoutY = 0;
+var lastStatus = '', lastMl = -1, lastT = 0;
+
+try { var saved = parseInt(localStorage.getItem('pocket-pint-tally'), 10); if (saved > 0) count = saved; } catch(e){}
+function saveCount(){ try { localStorage.setItem('pocket-pint-tally', String(count)); } catch(e){} }
+
+/* ---------- sizing ---------- */
+function resize(){
+  var r = stage.getBoundingClientRect();
+  W = Math.max(1, r.width); H = Math.max(1, r.height);
+  dpr = Math.min(3, window.devicePixelRatio || 1);
+  canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
+  u = Math.min(H/4.6, W*0.27);
+  cx = W/2;
+  barY = H - 0.45*u;
+  cyRest = barY - 1.69*u;
+  spoutY = cyRest - (HH + 0.42)*u;
+}
+try { new ResizeObserver(resize).observe(stage); } catch(e){ window.addEventListener('resize', resize); }
+resize();
+
+/* ---------- pour button ---------- */
+function setPour(on){
+  if (pouring === on) return;
+  pouring = on;
+  btn.classList.toggle('down', on);
+  if (on) wake();
+}
+btn.addEventListener('pointerdown', function(e){
+  e.preventDefault(); askMotion();
+  try { btn.setPointerCapture(e.pointerId); } catch(err){}
+  setPour(true);
+});
+['pointerup','pointercancel','lostpointercapture'].forEach(function(n){
+  btn.addEventListener(n, function(){ setPour(false); });
+});
+btn.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+btn.addEventListener('keydown', function(e){
+  if ((e.key === ' ' || e.key === 'Enter') && !e.repeat){ e.preventDefault(); setPour(true); }
+  else if (e.key === ' ' || e.key === 'Enter') e.preventDefault();
+});
+btn.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); setPour(false); } });
+btn.addEventListener('blur', function(){ setPour(false); });
+
+/* ---------- tipping by finger, mouse or arrow keys ---------- */
+canvas.addEventListener('pointerdown', function(e){
+  askMotion(); wake();
+  if (sensor.on) return;
+  drag = { id:e.pointerId, x0:e.clientX, a0:glassAngle };
+  canvas.classList.add('dragging');
+  try { canvas.setPointerCapture(e.pointerId); } catch(err){}
+});
+canvas.addEventListener('pointermove', function(e){
+  if (!drag || e.pointerId !== drag.id) return;
+  dragTarget = clamp(drag.a0 + (e.clientX - drag.x0)/(W*0.45)*1.9, -2.15, 2.15);
+});
+function endDrag(e){
+  if (!drag || (e && e.pointerId !== drag.id)) return;
+  drag = null; dragTarget = 0; canvas.classList.remove('dragging');
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('lostpointercapture', endDrag);
+window.addEventListener('keydown', function(e){
+  if (e.key === 'ArrowLeft'){ keyTilt = -1; e.preventDefault(); }
+  else if (e.key === 'ArrowRight'){ keyTilt = 1; e.preventDefault(); }
+});
+window.addEventListener('keyup', function(e){
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ keyTilt = 0; if (!drag) dragTarget = 0; }
+});
+
+/* ---------- the phone's tilt sensor, where the browser hands it over ---------- */
+var motionAsk = 'idle';                     // iPhones only hand the sensor over after a tap and a yes
+function askMotion(){
+  if (motionAsk !== 'idle') return;
+  try {
+    var E = window.DeviceOrientationEvent;
+    if (E && typeof E.requestPermission === 'function'){
+      motionAsk = 'asking';
+      E.requestPermission().then(function(r){ motionAsk = (r === 'granted') ? 'granted' : 'denied'; })
+                           .catch(function(){ motionAsk = 'idle'; });
+    } else motionAsk = 'none';
+  } catch(e){ motionAsk = 'idle'; }
+}
+document.addEventListener('touchend', askMotion);
+document.addEventListener('click', askMotion);
+window.addEventListener('deviceorientation', function(e){
+  if (e.beta == null || e.gamma == null || !touchy) return;
+  var b = e.beta*Math.PI/180, g = e.gamma*Math.PI/180;
+  var dx = Math.cos(b)*Math.sin(g), dy = -Math.sin(b);       // gravity in the phone's own frame
+  var deg = 0;
+  try { deg = (screen.orientation && typeof screen.orientation.angle === 'number') ? screen.orientation.angle : (window.orientation || 0); } catch(err){}
+  var a = deg*Math.PI/180;
+  var right = dx*Math.cos(a) - dy*Math.sin(a);
+  var down = -(dx*Math.sin(a) + dy*Math.cos(a));
+  if (!sensor.on){ sensor.on = true; sensor.gx = right; sensor.gy = down; drag = null; dragTarget = 0; }
+  sensor.gx += (right - sensor.gx)*0.3;
+  sensor.gy += (down - sensor.gy)*0.3;
+});
+
+var wakeLock = null;
+function wake(){
+  if (wakeLock || !navigator.wakeLock) return;
+  try { navigator.wakeLock.request('screen').then(function(l){ wakeLock = l; l.addEventListener('release', function(){ wakeLock = null; }); }).catch(function(){}); } catch(e){}
+}
+
+/* ---------- status line ---------- */
+function statusText(now, upright, total){
+  if (pouring && !upright) return sensor.on ? 'Stand your phone up to pour.' : 'Stand the glass up to pour.';
+  if (pouring && total >= FULL_ML - 3) return 'Brim-full. The rest goes on the bar.';
+  if (pouring) return 'Pouring…';
+  if (spillVis > 0.08) return 'Down it goes.';
+  if (now - doneAt < 3500) return 'Empty. That was pint number ' + count + '.';
+  if (total < 1) return 'Empty glass. Hold the tap to fill it.';
+  var how = sensor.on ? 'Tip your phone back to drink' : 'Drag the glass sideways to drink';
+  if (total >= LINE_ML - 5) return 'Full to the line. ' + how + '.';
+  return how + '.';
+}
+
+/* ---------- drawing helpers ---------- */
+function trace(p, close){
+  ctx.beginPath();
+  for (var i = 0; i < p.length; i++){ if (i) ctx.lineTo(p[i][0], p[i][1]); else ctx.moveTo(p[i][0], p[i][1]); }
+  if (close) ctx.closePath();
+}
+function brassGradient(x0, x1){
+  var g = ctx.createLinearGradient(x0, 0, x1, 0);
+  g.addColorStop(0, T.brassLo); g.addColorStop(0.3, T.brass); g.addColorStop(0.45, T.brassHi);
+  g.addColorStop(0.7, T.brass); g.addColorStop(1, T.brassLo);
+  return g;
+}
+function drawTap(){
+  var w = 0.26*u;
+  ctx.fillStyle = brassGradient(cx - w, cx + w);
+  ctx.fillRect(cx - w, -4, 2*w, Math.max(0, spoutY - 0.46*u + 4));
+  ctx.beginPath();
+  ctx.moveTo(cx - w, spoutY - 0.47*u); ctx.lineTo(cx + w, spoutY - 0.47*u);
+  ctx.lineTo(cx + 0.14*u, spoutY); ctx.lineTo(cx - 0.14*u, spoutY); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = brassGradient(cx - 1.5*w, cx + 1.5*w);
+  var cy0 = spoutY - 0.64*u, ch = 0.17*u;
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(cx - 1.5*w, cy0, 3*w, ch, 0.05*u); else ctx.rect(cx - 1.5*w, cy0, 3*w, ch);
+  ctx.fill();
+}
+
+/* ---------- one frame: physics, then paint ---------- */
+function frame(now){
+  var dt = Math.min(0.05, Math.max(0.001, (now - lastT)/1000)); lastT = now;
+
+  // how the glass sits relative to gravity
+  var target, phi;
+  if (sensor.on){
+    if (Math.hypot(sensor.gx, sensor.gy) > 0.2) planeAngle = Math.atan2(sensor.gx, sensor.gy);
+    glassAngle += (0 - glassAngle)*(1 - Math.exp(-dt*12));
+    target = planeAngle; phi = Math.acos(clamp(sensor.gy, -1, 1));
+  } else {
+    if (keyTilt) dragTarget = clamp(dragTarget + keyTilt*2*dt, -2.15, 2.15);
+    glassAngle += (dragTarget - glassAngle)*(1 - Math.exp(-dt*12));
+    target = glassAngle; phi = Math.abs(glassAngle);
+  }
+  // the liquid lags behind and sloshes
+  liqVel += (wrap(target - liq)*70 - liqVel*(calm ? 17 : 7))*dt;
+  liq = wrap(liq + liqVel*dt);
+  var upright = phi < 0.5;
+
+  // pouring
+  flow += (((pouring && upright) ? 1 : 0) - flow)*(1 - Math.exp(-dt*10));
+  if (flow > 0.02){ var add = POUR_RATE*flow*dt; beer += add*0.78; foam += add*0.22; }
+  var settle = foam*0.05*dt; foam -= settle; beer += settle*0.2;
+
+  // whatever no longer fits runs out over the rim
+  var cap = Math.min(retainAt(liq), retainAt((liq >= 0 ? 1 : -1)*phi))*ML;
+  var total = beer + foam, spill = 0;
+  if (total > cap){
+    var ex = total - cap, out = Math.min(ex, ex*(1 - Math.exp(-dt*7)) + 25*dt);
+    spill = out/dt;
+    var f = Math.min(foam, out); foam -= f; beer = Math.max(0, beer - (out - f));
+    total = beer + foam;
+  }
+  var tipped = Math.abs(liq) > 0.2 || phi > 0.35;
+  spillVis += ((tipped ? clamp(spill/160, 0, 1) : 0) - spillVis)*(1 - Math.exp(-dt*9));
+  if (total > peak) peak = total;
+  if (total < 4 && !pouring && flow < 0.05 && peak > 0){
+    if (peak > 200){ count++; saveCount(); doneAt = now; }
+    beer = 0; foam = 0; total = 0; peak = 0;
+  }
+
+  // levels
+  var gx = Math.sin(liq), gy = Math.cos(liq);
+  var cT = levelFor(total/ML, gx, gy), cB = levelFor(beer/ML, gx, gy), cMax = range(gx, gy)[1];
+
+  // bubbles
+  spawnAcc += dt*((beer/FULL_ML)*(calm ? 5 : 14) + flow*(calm ? 8 : 40));
+  while (spawnAcc >= 1){
+    spawnAcc -= 1;
+    if (bubbles.length > 70) continue;
+    for (var k = 0; k < 4; k++){
+      var bx = Math.random()*2 - 1, by = (Math.random()*2 - 1)*HH;
+      if (bx*gx + by*gy < cB + 0.1 || !insidePoly(bx, by)) continue;
+      bubbles.push({ x:bx, y:by, r:0.018 + Math.random()*0.034, s:0.35 + Math.random()*0.55, ph:Math.random()*6.28 });
+      break;
+    }
+  }
+  for (var i = bubbles.length - 1; i >= 0; i--){
+    var bb = bubbles[i], wob = Math.cos(now*0.004 + bb.ph)*0.07*dt;
+    bb.x += -gx*bb.s*dt + gy*wob; bb.y += -gy*bb.s*dt - gx*wob;
+    if (bb.x*gx + bb.y*gy < cB + bb.r) bubbles.splice(i, 1);
+  }
+
+  // text
+  var ml = Math.round(total);
+  if (ml !== lastMl){ lastMl = ml; elMl.textContent = ml; }
+  var st = statusText(now, upright, total);
+  if (st !== lastStatus){ lastStatus = st; elStatus.textContent = st; }
+  if (elTally.textContent !== String(count)) elTally.textContent = count;
+
+  paint(now, gx, gy, cT, cB, cMax, total);
+  requestAnimationFrame(frame);
+}
+
+function paint(now, gx, gy, cT, cB, cMax, total){
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  // the bar top
+  ctx.fillStyle = T.bar; ctx.fillRect(0, barY, W, H - barY + 1);
+  ctx.fillStyle = T.barEdge; ctx.fillRect(0, barY, W, Math.max(2, u*0.05));
+
+  // the glass pivots on its foot and lifts a little as it tips
+  var sa = Math.sin(glassAngle), ca = Math.cos(glassAngle), low = -Infinity;
+  for (var i = 0; i < FOOT.length; i++){ var yy = FOOT[i][0]*sa + FOOT[i][1]*ca; if (yy > low) low = yy; }
+  var cy = cyRest - (low - 1.69)*u - 0.3*u*Math.min(1, Math.abs(glassAngle)*1.4);
+
+  var gxc = cx - Math.sin(glassAngle)*0.75*u;   // lean away so the rim stays on screen
+
+  drawTap();
+
+  // stream from the tap
+  if (flow > 0.02){
+    var endY = (total > 2 ? cy + (cT/Math.max(0.3, gy))*u : cy + HH*u) + 0.05*u;
+    var sw = (0.09 + 0.012*Math.sin(now*0.02))*u*flow;
+    ctx.fillStyle = T.beer; ctx.fillRect(cx - sw, spoutY - 1, 2*sw, Math.max(0, endY - spoutY));
+    ctx.fillStyle = hexA(T.foam, 0.55); ctx.fillRect(cx - sw*0.55, spoutY - 1, sw*0.4, Math.max(0, endY - spoutY));
+  }
+
+  ctx.save();
+  ctx.translate(gxc, cy); ctx.rotate(glassAngle); ctx.scale(u, u);
+
+  trace(POLY, true); ctx.fillStyle = T.glassFill; ctx.fill();
+
+  if (total > 0.5){
+    var pT = clip(POLY, gx, gy, cT), pB = clip(POLY, gx, gy, cB);
+    if (pB.length > 2){
+      var grad = ctx.createLinearGradient(gx*cB, gy*cB, gx*cMax, gy*cMax);
+      grad.addColorStop(0, T.beer); grad.addColorStop(1, T.beerDeep);
+      trace(pB, true); ctx.fillStyle = grad; ctx.fill();
+      ctx.save(); ctx.clip();
+      ctx.fillStyle = hexA(T.foam, 0.6);
+      for (var b = 0; b < bubbles.length; b++){
+        ctx.beginPath(); ctx.arc(bubbles[b].x, bubbles[b].y, bubbles[b].r, 0, 6.2832); ctx.fill();
+      }
+      ctx.restore();
+    }
+    var thick = cB - cT;
+    if (thick > 0.004 && pT.length > 2){
+      var pF = clip(pT, -gx, -gy, -cB);
+      ctx.fillStyle = T.foam;
+      if (pF.length > 2){ trace(pF, true); ctx.fill(); }
+      // a frothy edge along the top of the head
+      var ends = [];
+      for (var j = 0; j < pT.length; j++){ if (Math.abs(pT[j][0]*gx + pT[j][1]*gy - cT) < 1e-4) ends.push(pT[j]); }
+      if (ends.length >= 2){
+        var A = ends[0], B = ends[ends.length - 1];
+        var len = Math.hypot(B[0]-A[0], B[1]-A[1]), n = Math.max(2, Math.ceil(len/0.17));
+        var rr = Math.min(0.1, thick*0.9);
+        ctx.save(); trace(POLY, true); ctx.clip();
+        for (var q = 0; q <= n; q++){
+          var t = q/n, r2 = rr*(0.78 + 0.22*Math.sin(q*2.3 + now*0.0016));
+          ctx.beginPath();
+          ctx.arc(A[0] + (B[0]-A[0])*t + gx*r2*0.35, A[1] + (B[1]-A[1])*t + gy*r2*0.35, r2, 0, 6.2832);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+  }
+
+  // the glass itself
+  trace(BASE, true); ctx.fillStyle = T.glassFill; ctx.fill();
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.strokeStyle = T.glass; ctx.lineWidth = 0.07;
+  trace(BASE, true); ctx.stroke();
+  trace(POLY, false); ctx.stroke();
+  ctx.strokeStyle = T.shine; ctx.lineWidth = 0.065;
+  ctx.beginPath(); ctx.moveTo(-0.76, -1.0); ctx.lineTo(-0.78, 0.15); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-0.72, 0.5); ctx.lineTo(-0.67, 0.85); ctx.stroke();
+  // the calibration mark every half-litre glass carries
+  ctx.strokeStyle = T.etch; ctx.lineWidth = 0.028;
+  ctx.beginPath(); ctx.moveTo(0.46, LINE_Y); ctx.lineTo(0.82, LINE_Y); ctx.stroke();
+  ctx.save(); ctx.scale(1/u, 1/u);
+  ctx.fillStyle = T.etch; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+  ctx.font = '600 ' + Math.max(9, 0.2*u).toFixed(1) + 'px "Barlow Semi Condensed","Arial Narrow",Arial,sans-serif';
+  ctx.fillText('0,5 l', 0.82*u, (LINE_Y - 0.07)*u);
+  ctx.restore();
+  ctx.restore();
+
+  // beer leaving over the lower rim
+  if (spillVis > 0.03 && Math.abs(liq) > 0.2){
+    var side = liq > 0 ? 1 : -1, rim = side > 0 ? RIM_R : RIM_L;
+    var px = gxc + (rim[0]*ca - rim[1]*sa)*u, py = cy + (rim[0]*sa + rim[1]*ca)*u;
+    var vx = sensor.on ? Math.sin(planeAngle) : 0, vy = sensor.on ? Math.cos(planeAngle) : 1;
+    var ox = ca*side, oy = sa*side, L = 1.9*u;
+    var sg = ctx.createLinearGradient(px, py, px + vx*L, py + vy*L);
+    sg.addColorStop(0, T.beer); sg.addColorStop(0.55, hexA(T.beer, 0.85)); sg.addColorStop(1, hexA(T.beer, 0));
+    ctx.strokeStyle = sg; ctx.lineCap = 'round'; ctx.lineWidth = u*(0.05 + 0.16*Math.min(1, spillVis));
+    ctx.beginPath(); ctx.moveTo(px, py);
+    ctx.quadraticCurveTo(px + ox*0.3*u, py + oy*0.3*u, px + ox*0.42*u + vx*L, py + oy*0.42*u + vy*L);
+    ctx.stroke();
+  }
+}
+
+/* ---------- boot ---------- */
+function start(data){
+  if (data && typeof data.beer === 'number'){ beer = data.beer; foam = data.foam || 0; }
+  peak = beer + foam;
+  elTally.textContent = count;
+  lastT = performance.now();
+  requestAnimationFrame(frame);
+}
+var hot = window.claude && window.claude.hot;
+try { if (hot && hot.snapshot) hot.snapshot(function(){ return { beer:beer, foam:foam }; }); } catch(e){}
+if (hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+})();
+</script>
+</body>
+</html>
