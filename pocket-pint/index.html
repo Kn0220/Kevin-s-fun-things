@@ -3,22 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="A virtual beer glass. Hold the tap to fill it, then tip your phone back to drink.">
+<meta name="description" content="A cold virtual beer. Hold the tap to fill the glass, wipe the condensation, then tip your phone back to drink.">
 <meta name="theme-color" content="#1C3A2F">
 <style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
 <title>Pocket Pint</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
 <style>
-/* Layout: one screen. Tiled pub wall on top with the wordmark and tally, the glass
-   stands on the bar under a brass tap, and the bar itself holds the readout and
-   the pour button at thumb height. */
+/* Layout: one screen. Tiled pub wall on top with the wordmark and tally, a cold glass
+   stands on the bar under a brass tap, and the bar itself holds the readout and the
+   two hold-buttons at thumb height. */
 :root{
   --wall:#E4EEE3; --grout:#D2E0D4; --ink:#17352B; --muted:#4D685D;
-  --bar:#1C3A2F; --bar-edge:#2F5846; --on-bar:#F6EED8; --on-bar-muted:#A9C2B4;
-  --beer:#EFAA1A; --beer-deep:#BF6F0A; --foam:#FFF7E0;
-  --brass:#C39A3A; --brass-hi:#F0D88C; --brass-lo:#8A6A1E;
-  --glass:rgba(23,53,43,.5); --glass-fill:rgba(255,255,255,.42);
-  --shine:rgba(255,255,255,.75); --etch:rgba(23,53,43,.62);
+  --bar:#1C3A2F; --bar-hi:#355F4D; --on-bar:#F6EED8; --on-bar-muted:#A9C2B4;
+  --beer-top:#F8C847; --beer:#EFA51A; --beer-deep:#B25E08;
+  --foam:#FFF5DC; --foam-light:#FFFCF3; --foam-shade:#E9D6A8;
+  --brass:#C39A3A; --brass-hi:#F3DE98; --brass-lo:#80601A; --knob:#14261F;
+  --glow:rgba(255,255,255,.7); --shadow:rgba(6,22,16,.5);
+  --glass-line:rgba(23,53,43,.42); --glass-edge:rgba(52,96,80,.26); --glass-mid:rgba(255,255,255,.2);
+  --shine:rgba(255,255,255,.9); --etch:rgba(23,53,43,.5);
   --btn:#EFAA1A; --btn-ink:#22220F; --btn-shadow:#9A5A06; --focus:#FFF7E0;
   --display:"Alfa Slab One",Rockwell,"Roboto Slab",Georgia,serif;
   --text:"Barlow Semi Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
@@ -26,22 +28,26 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --wall:#11281F; --grout:#183529; --ink:#F3EAD2; --muted:#9CB6A8;
-    --bar:#091812; --bar-edge:#1D3A2E; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
-    --beer:#F2B02A; --beer-deep:#B5650A; --foam:#FFF4D6;
-    --brass:#CFA548; --brass-hi:#F2DC95; --brass-lo:#7C5E1A;
-    --glass:rgba(243,234,210,.55); --glass-fill:rgba(255,255,255,.05);
-    --shine:rgba(255,255,255,.3); --etch:rgba(255,250,235,.82);
+    --bar:#091812; --bar-hi:#1F3D30; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
+    --beer-top:#FFCE55; --beer:#F2AE28; --beer-deep:#A65708;
+    --foam:#FFF3D4; --foam-light:#FFFBEC; --foam-shade:#DCC690;
+    --brass:#CFA548; --brass-hi:#F5E2A0; --brass-lo:#75581A; --knob:#EDE3C8;
+    --glow:rgba(242,176,42,.13); --shadow:rgba(0,0,0,.65);
+    --glass-line:rgba(243,234,210,.38); --glass-edge:rgba(210,232,220,.17); --glass-mid:rgba(255,255,255,.03);
+    --shine:rgba(255,255,255,.55); --etch:rgba(255,250,235,.62);
     --btn:#F2B02A; --btn-ink:#1B1A0A; --btn-shadow:#8A5206; --focus:#FFF4D6;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --wall:#11281F; --grout:#183529; --ink:#F3EAD2; --muted:#9CB6A8;
-  --bar:#091812; --bar-edge:#1D3A2E; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
-  --beer:#F2B02A; --beer-deep:#B5650A; --foam:#FFF4D6;
-  --brass:#CFA548; --brass-hi:#F2DC95; --brass-lo:#7C5E1A;
-  --glass:rgba(243,234,210,.55); --glass-fill:rgba(255,255,255,.05);
-  --shine:rgba(255,255,255,.3); --etch:rgba(255,250,235,.82);
+  --bar:#091812; --bar-hi:#1F3D30; --on-bar:#F3EAD2; --on-bar-muted:#8FA99B;
+  --beer-top:#FFCE55; --beer:#F2AE28; --beer-deep:#A65708;
+  --foam:#FFF3D4; --foam-light:#FFFBEC; --foam-shade:#DCC690;
+  --brass:#CFA548; --brass-hi:#F5E2A0; --brass-lo:#75581A; --knob:#EDE3C8;
+  --glow:rgba(242,176,42,.13); --shadow:rgba(0,0,0,.65);
+  --glass-line:rgba(243,234,210,.38); --glass-edge:rgba(210,232,220,.17); --glass-mid:rgba(255,255,255,.03);
+  --shine:rgba(255,255,255,.55); --etch:rgba(255,250,235,.62);
   --btn:#F2B02A; --btn-ink:#1B1A0A; --btn-shadow:#8A5206; --focus:#FFF4D6;
   color-scheme:dark;
 }
@@ -54,7 +60,7 @@ body{
   overscroll-behavior:none;-webkit-text-size-adjust:100%;
 }
 .pub{
-  height:100%;min-height:26rem;display:grid;grid-template-rows:auto minmax(11rem,1fr) auto;
+  height:100%;min-height:27rem;display:grid;grid-template-rows:auto minmax(12rem,1fr) auto;
   background:
     linear-gradient(var(--grout) 2px,transparent 2px) 0 0/100% 3.5rem,
     linear-gradient(90deg,var(--grout) 2px,transparent 2px) 0 0/7rem 3.5rem,
@@ -70,9 +76,8 @@ body{
 .tally-num{font-family:var(--display);font-size:1.6rem;line-height:1;font-variant-numeric:tabular-nums}
 
 .stage{position:relative;min-height:0;min-width:0}
-#glass{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;
-  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-#glass.dragging{cursor:grabbing}
+#glass{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 
 .deck{background:var(--bar);color:var(--on-bar)}
 .deck-inner{
@@ -84,17 +89,21 @@ body{
 .unit{font-family:var(--text);font-weight:700;font-size:.95rem;letter-spacing:.06em;color:var(--on-bar-muted);margin-left:.3rem}
 .status{margin:0;flex:1;min-width:0;min-height:2.7em;display:flex;align-items:center;font-weight:500;font-size:1.02rem;color:var(--on-bar-muted)}
 
-.pour{
-  appearance:none;border:0;width:100%;padding:1.05rem 1rem;border-radius:.85rem;
-  background:var(--btn);color:var(--btn-ink);box-shadow:0 .4rem 0 var(--btn-shadow);
-  font-family:var(--display);font-size:1.3rem;letter-spacing:.02em;line-height:1;cursor:pointer;
-  margin-bottom:.4rem;touch-action:none;-webkit-user-select:none;user-select:none;
+.taps{display:flex;gap:.7rem;margin-bottom:.4rem}
+.btn{
+  appearance:none;border:0;flex:1 1 0;min-width:0;padding:1.05rem .6rem;border-radius:.85rem;
+  font-family:var(--display);font-size:1.18rem;letter-spacing:.02em;line-height:1;cursor:pointer;
+  touch-action:none;-webkit-user-select:none;user-select:none;
   -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
-  transition:transform .08s ease,box-shadow .08s ease;
+  transition:transform .09s cubic-bezier(.3,.7,.4,1),box-shadow .09s cubic-bezier(.3,.7,.4,1);
 }
-.pour.down{transform:translateY(.28rem);box-shadow:0 .12rem 0 var(--btn-shadow)}
-.pour:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
-@media (prefers-reduced-motion: reduce){.pour{transition:none}}
+.btn.pour{background:var(--btn);color:var(--btn-ink);box-shadow:0 .4rem 0 var(--btn-shadow)}
+.btn.sip{background:var(--bar-hi);color:var(--on-bar);box-shadow:0 .4rem 0 rgba(0,0,0,.45)}
+.btn.down{transform:translateY(.28rem)}
+.btn.pour.down{box-shadow:0 .12rem 0 var(--btn-shadow)}
+.btn.sip.down{box-shadow:0 .12rem 0 rgba(0,0,0,.45)}
+.btn:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+@media (prefers-reduced-motion: reduce){.btn{transition:none}}
 </style>
 </head>
 <body>
@@ -105,7 +114,7 @@ body{
   </header>
 
   <div class="stage" id="stage">
-    <canvas id="glass" role="img" aria-label="A beer glass standing on the bar under a brass tap"></canvas>
+    <canvas id="glass" role="img" aria-label="A cold beer glass, fogged with condensation, standing on the bar under a brass tap"></canvas>
   </div>
 
   <footer class="deck">
@@ -114,7 +123,10 @@ body{
         <p class="vol"><span id="ml">0</span><span class="unit">ml</span></p>
         <p class="status" id="status" aria-live="polite">Hold the tap to fill the glass.</p>
       </div>
-      <button class="pour" id="pour" type="button">Hold to pour</button>
+      <div class="taps">
+        <button class="btn pour" id="pour" type="button">Hold to pour</button>
+        <button class="btn sip" id="sip" type="button">Hold to drink</button>
+      </div>
     </div>
   </footer>
 </main>
@@ -122,73 +134,131 @@ body{
 <script>
 (function(){
 'use strict';
+var TAU = Math.PI*2;
+function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
+function lerp(a, b, t){ return a + (b - a)*t; }
+function wrap(a){ while (a > Math.PI) a -= TAU; while (a <= -Math.PI) a += TAU; return a; }
+function ease(dt, rate){ return 1 - Math.exp(-dt*rate); }
+function hash(n){ var s = Math.sin(n*127.1 + 311.7)*43758.5453; return s - Math.floor(s); }
+function noise1(x){ var i = Math.floor(x), f = x - i; f = f*f*(3 - 2*f); return lerp(hash(i), hash(i+1), f); }
+function hexRGB(hex){
+  var h = String(hex).replace('#','');
+  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  var n = parseInt(h, 16); if (isNaN(n)) n = 0xEFA51A;
+  return [(n>>16)&255, (n>>8)&255, n&255];
+}
+function rgba(hex, a){ var c = hexRGB(hex); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+function mix(h1, h2, t){
+  var a = hexRGB(h1), b = hexRGB(h2);
+  return 'rgb('+Math.round(lerp(a[0],b[0],t))+','+Math.round(lerp(a[1],b[1],t))+','+Math.round(lerp(a[2],b[2],t))+')';
+}
 
-/* ---------- glass geometry, in glass units (origin at the glass centre, y down) ---------- */
-var HH = 1.45, FULL_ML = 568, LINE_ML = 500, POUR_RATE = 130;
-var POLY = [[0.93,-1.45],[1,-0.87],[0.98,-0.145],[0.72,1.33],[0.6,1.45],
-            [-0.6,1.45],[-0.72,1.33],[-0.98,-0.145],[-1,-0.87],[-0.93,-1.45]];
-var RIM_L = [-0.93,-1.45], RIM_R = [0.93,-1.45];
-var BASE = [[-0.6,1.45],[0.6,1.45],[0.65,1.6],[0.6,1.69],[-0.6,1.69],[-0.65,1.6]];
-var FOOT = BASE.concat([RIM_L, RIM_R]);
-
-function clip(poly, gx, gy, c){            // keep the part where p·g >= c
-  var out = [], n = poly.length;
-  for (var i = 0; i < n; i++){
-    var a = poly[i], b = poly[(i+1)%n];
-    var da = a[0]*gx + a[1]*gy - c, db = b[0]*gx + b[1]*gy - c;
-    if (da >= 0) out.push(a);
-    if ((da >= 0) !== (db >= 0)){
-      var t = da/(da-db);
-      out.push([a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t]);
+/* =====================================================================
+   The glass: a 0,5 l Willibecher. Profiles are splines through a few
+   control points, in glass units (origin at mid-height, y down).
+   ===================================================================== */
+var HH = 1.5, FULL_ML = 568, LINE_ML = 500, POUR_RATE = 135;
+var INNER_CP = [[0,1.5],[0.40,1.5],[0.58,1.47],[0.67,1.38],[0.705,1.24],[0.76,0.80],[0.86,0.10],[0.95,-0.55],[0.985,-0.95],[0.975,-1.25],[0.93,-1.5]];
+var OUTER_CP = [[0,1.78],[0.50,1.78],[0.67,1.755],[0.745,1.67],[0.764,1.5],[0.770,1.24],[0.818,0.80],[0.916,0.10],[1.005,-0.55],[1.04,-0.95],[1.03,-1.25],[0.975,-1.5]];
+function spline(cp, per){
+  var pts = [], n = cp.length;
+  function P(i){
+    if (i < 0) return [-cp[1][0], cp[1][1]];
+    if (i >= n) return [2*cp[n-1][0] - cp[n-2][0], 2*cp[n-1][1] - cp[n-2][1]];
+    return cp[i];
+  }
+  for (var i = 0; i < n - 1; i++){
+    var p0 = P(i-1), p1 = P(i), p2 = P(i+1), p3 = P(i+2);
+    for (var k = 0; k < per; k++){
+      var t = k/per, t2 = t*t, t3 = t2*t;
+      pts.push([
+        0.5*(2*p1[0] + (-p0[0]+p2[0])*t + (2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2 + (-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),
+        0.5*(2*p1[1] + (-p0[1]+p2[1])*t + (2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2 + (-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)
+      ]);
     }
   }
+  pts.push(cp[n-1].slice());
+  return pts;                                   // right half, bottom centre up to the rim
+}
+function ring(half){                            // closed loop, clockwise on screen
+  var out = [], i;
+  for (i = half.length - 1; i >= 0; i--) out.push([half[i][0], half[i][1]]);
+  for (i = 1; i < half.length; i++) out.push([-half[i][0], half[i][1]]);
   return out;
 }
-function area(p){
-  var s = 0, n = p.length;
-  for (var i = 0; i < n; i++){ var a = p[i], b = p[(i+1)%n]; s += a[0]*b[1] - b[0]*a[1]; }
-  return Math.abs(s)/2;
+var INNER_HALF = spline(INNER_CP, 8);
+var POLY = ring(spline(INNER_CP, 3));            // coarse copy for the volume maths
+var INNER = ring(INNER_HALF);
+var OUTER = ring(spline(OUTER_CP, 8));
+var RIM_L = [-0.93,-1.5], RIM_R = [0.93,-1.5];
+var FOOT = [[0.75,1.78],[-0.75,1.78],[0.5,1.78],[-0.5,1.78],[0.77,1.5],[-0.77,1.5],[1.04,-0.95],[-1.04,-0.95],[0.975,-1.5],[-0.975,-1.5]];
+
+function toPath(pts){
+  var p = new Path2D();
+  for (var i = 0; i < pts.length; i++){ if (i) p.lineTo(pts[i][0], pts[i][1]); else p.moveTo(pts[i][0], pts[i][1]); }
+  p.closePath(); return p;
+}
+var INNER_P = toPath(INNER), OUTER_P = toPath(OUTER);
+var WALL_P = new Path2D(); WALL_P.addPath(OUTER_P); WALL_P.addPath(INNER_P);
+
+function areaBelow(gx, gy, c){                  // area of the glass on the low side of a tilted plane
+  var P = POLY, n = P.length, sum = 0, fx = 0, fy = 0, px = 0, py = 0, has = false;
+  var a = P[n-1], da = a[0]*gx + a[1]*gy - c;
+  for (var i = 0; i < n; i++){
+    var b = P[i], db = b[0]*gx + b[1]*gy - c;
+    if ((da >= 0) !== (db >= 0)){
+      var t = da/(da - db), x = a[0] + (b[0]-a[0])*t, y = a[1] + (b[1]-a[1])*t;
+      if (!has){ fx = px = x; fy = py = y; has = true; } else { sum += px*y - x*py; px = x; py = y; }
+    }
+    if (db >= 0){
+      if (!has){ fx = px = b[0]; fy = py = b[1]; has = true; } else { sum += px*b[1] - b[0]*py; px = b[0]; py = b[1]; }
+    }
+    a = b; da = db;
+  }
+  if (has) sum += px*fy - fx*py;
+  return Math.abs(sum)/2;
 }
 function range(gx, gy){
-  var lo = Infinity, hi = -Infinity;
+  var lo = 1e9, hi = -1e9;
   for (var i = 0; i < POLY.length; i++){ var d = POLY[i][0]*gx + POLY[i][1]*gy; if (d < lo) lo = d; if (d > hi) hi = d; }
   return [lo, hi];
 }
-function levelFor(target, gx, gy){          // plane offset that holds `target` area below it
-  var r = range(gx, gy), lo = r[0], hi = r[1];
+function levelFor(target, gx, gy, r){
+  var lo = r[0], hi = r[1];
   if (target <= 0) return hi;
-  for (var i = 0; i < 22; i++){
-    var mid = (lo+hi)/2;
-    if (area(clip(POLY, gx, gy, mid)) > target) lo = mid; else hi = mid;
+  for (var i = 0; i < 20; i++){
+    var mid = (lo + hi)/2;
+    if (areaBelow(gx, gy, mid) > target) lo = mid; else hi = mid;
   }
-  return (lo+hi)/2;
+  return (lo + hi)/2;
 }
-function retainAt(angle){                   // area the glass can hold at this tilt
+function retainAt(angle){
   var gx = Math.sin(angle), gy = Math.cos(angle);
   var c = Math.max(RIM_L[0]*gx + RIM_L[1]*gy, RIM_R[0]*gx + RIM_R[1]*gy);
-  return area(clip(POLY, gx, gy, c));
+  return areaBelow(gx, gy, c);
 }
-function insidePoly(x, y){
-  var sign = 0, n = POLY.length;
+function chord(gx, gy, c){                      // where the surface meets the glass walls
+  var P = INNER, n = P.length, lo = 1e9, hi = -1e9, a = P[n-1], da = a[0]*gx + a[1]*gy - c;
   for (var i = 0; i < n; i++){
-    var a = POLY[i], b = POLY[(i+1)%n];
-    var cr = (b[0]-a[0])*(y-a[1]) - (b[1]-a[1])*(x-a[0]);
-    if (cr !== 0){ var s = cr > 0 ? 1 : -1; if (sign === 0) sign = s; else if (s !== sign) return false; }
+    var b = P[i], db = b[0]*gx + b[1]*gy - c;
+    if ((da >= 0) !== (db >= 0)){
+      var t = da/(da - db), x = a[0] + (b[0]-a[0])*t, y = a[1] + (b[1]-a[1])*t, s = x*gy - y*gx;
+      if (s < lo) lo = s; if (s > hi) hi = s;
+    }
+    a = b; da = db;
   }
-  return true;
+  return hi - lo > 0.01 ? [lo, hi] : null;
 }
-var ML = FULL_ML / area(POLY);              // millilitres per unit of area
-var LINE_Y = levelFor(LINE_ML/ML, 0, 1);    // height of the 0,5 l mark
-
-function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
-function wrap(a){ while (a > Math.PI) a -= 2*Math.PI; while (a <= -Math.PI) a += 2*Math.PI; return a; }
-function hexA(hex, a){
-  var h = hex.replace('#','');
-  if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
-  var n = parseInt(h, 16);
-  if (isNaN(n)) return hex;
-  return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';
+function inOuter(x, y){
+  var P = OUTER, n = P.length, inside = false;
+  for (var i = 0, j = n - 1; i < n; j = i++){
+    var a = P[i], b = P[j];
+    if ((a[1] > y) !== (b[1] > y) && x < (b[0]-a[0])*(y-a[1])/(b[1]-a[1]) + a[0]) inside = !inside;
+  }
+  return inside;
 }
+var ML = FULL_ML / areaBelow(0, 1, -99);
+var LINE_Y = levelFor(LINE_ML/ML, 0, 1, range(0, 1));
 
 /* ---------- elements ---------- */
 var stage = document.getElementById('stage');
@@ -197,10 +267,10 @@ var ctx = canvas.getContext('2d');
 var elMl = document.getElementById('ml');
 var elStatus = document.getElementById('status');
 var elTally = document.getElementById('tally');
-var btn = document.getElementById('pour');
-var calm = false;
+var btnPour = document.getElementById('pour');
+var btnSip = document.getElementById('sip');
+var calm = false, touchy = false;
 try { calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch(e){}
-var touchy = false;
 try { touchy = window.matchMedia('(pointer: coarse)').matches; } catch(e){}
 
 /* ---------- theme tokens for the canvas ---------- */
@@ -208,9 +278,11 @@ var T = {};
 function readTokens(){
   var s = getComputedStyle(document.documentElement);
   function g(n){ return s.getPropertyValue(n).trim(); }
-  T = { bar:g('--bar'), barEdge:g('--bar-edge'), beer:g('--beer'), beerDeep:g('--beer-deep'), foam:g('--foam'),
-        brass:g('--brass'), brassHi:g('--brass-hi'), brassLo:g('--brass-lo'),
-        glass:g('--glass'), glassFill:g('--glass-fill'), shine:g('--shine'), etch:g('--etch') };
+  T = { bar:g('--bar'), barHi:g('--bar-hi'), beerTop:g('--beer-top'), beer:g('--beer'), beerDeep:g('--beer-deep'),
+        foam:g('--foam'), foamLight:g('--foam-light'), foamShade:g('--foam-shade'),
+        brass:g('--brass'), brassHi:g('--brass-hi'), brassLo:g('--brass-lo'), knob:g('--knob'),
+        glow:g('--glow'), shadow:g('--shadow'), glassLine:g('--glass-line'), glassEdge:g('--glass-edge'),
+        glassMid:g('--glass-mid'), shine:g('--shine'), etch:g('--etch') };
 }
 readTokens();
 try {
@@ -218,111 +290,215 @@ try {
   new MutationObserver(readTokens).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme','class','style']});
 } catch(e){}
 
-/* ---------- state ---------- */
-var beer = 190, foam = 42, peak = 0, count = 0;
-var pouring = false, flow = 0;
-var glassAngle = 0, dragTarget = 0, keyTilt = 0, drag = null;
-var liq = 0, liqVel = 0, planeAngle = 0, spillVis = 0, doneAt = -1e9;
-var bubbles = [], spawnAcc = 0;
-var sensor = { on:false, gx:0, gy:1 };
-var W = 0, H = 0, dpr = 1, u = 60, cx = 0, cyRest = 0, barY = 0, spoutY = 0;
-var lastStatus = '', lastMl = -1, lastT = 0;
+/* =====================================================================
+   State
+   ===================================================================== */
+var REST = 0.35;                             // a natural hold leans back about 20 degrees
+var NW = 36, G = 95, V0 = 5, STREAM_W = 0.085, BRUSH = 0.2, DT = 1/120;
+var beer = 262, foam = 52, peak = 0, count = 0, fizz = 0.85, haze = 0, chill = 1;
+var pourHeld = false, drinkHeld = false;
+var handle = 0, handleV = 0, segs = [], drips = [];
+var glassAngle = 0, glassVel = 0, dragTarget = 0, keyTilt = 0, tiltDrag = null, pitch = 0;
+var liq = 0, liqVel = 0, roll = 0, phi = 0, pitchTot = 0, planeM = 1, rollShare = 0;
+var spillVis = 0, spillFoam = 0, gulp = 0, doneAt = -1e9;
+var waveH = new Float32Array(NW), waveV = new Float32Array(NW);
+var bubbles = [], splash = [], bubAcc = 0, splashAcc = 0;
+var SITES = [[-0.52,1.45],[-0.33,1.48],[-0.13,1.49],[0.06,1.49],[0.25,1.485],[0.45,1.465],[-0.7,1.08],[0.72,0.92],[0.34,1.48]].map(function(p, i){
+  return { x:p[0], y:p[1], t:hash(i)*0.4, every:0.2 + hash(i + 9)*0.36 };
+});
+var beads = [], wipes = {}, carried = 0, wipeDist = 0, wipedOnce = false, fogAmt = 1, beadAcc = 0;
+var sensor = { on:false, rx:0, ry:1, rz:0, x:0, y:1, z:0, ax:0, ay:0, px:0, py:1, bx:0, by:1 };
+var L = { gx:0, gy:1, cT:0, cB:0, cMin:-HH, cMax:HH, chT:null, chB:null, prevCT:null, laceAt:null };
+var P = { gxc:0, cy:0, zoom:1, e:0.065, lift:0 };
+var W = 0, H = 0, dpr = 1, u = 60, cx = 0, baseY = 0, barY = 0, spoutY = 0, streamD = 3.5;
+var fs = 0, FW = 0, FH = 0, fogM = null, fogMx = null, fogO = null, fogOx = null, laceC = null, laceX = null;
+var fogPattern = null, foamPattern = null, beadSprite = null, fogDirty = true, fogSeed = true, fogClock = 0, laceClock = 0;
+var fogTicks = 0, hintUntil = 0;
+var lastStatus = '', pendStatus = '', pendAt = 0, shownMl = -1, mlSmooth = 0, lastT = 0, acc = 0;
 
 try { var saved = parseInt(localStorage.getItem('pocket-pint-tally'), 10); if (saved > 0) count = saved; } catch(e){}
 function saveCount(){ try { localStorage.setItem('pocket-pint-tally', String(count)); } catch(e){} }
+
+/* =====================================================================
+   Textures made once: fog grain, foam cells, a water bead
+   ===================================================================== */
+function makeCanvas(w, h){ var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function buildTextures(){
+  var i, x, c;
+  // foam: tightly packed cells of different sizes
+  c = makeCanvas(72, 72); x = c.getContext('2d');
+  for (i = 0; i < 150; i++){
+    var r = 0.8 + hash(i*3.1)*hash(i*1.7)*3.4, px = hash(i*7.3)*72, py = hash(i*5.9)*72;
+    for (var ox = -72; ox <= 72; ox += 72) for (var oy = -72; oy <= 72; oy += 72){
+      x.beginPath(); x.arc(px + ox, py + oy, r, 0, TAU);
+      x.fillStyle = 'rgba(255,255,255,' + (0.25 + hash(i)*0.3) + ')'; x.fill();
+      x.lineWidth = 0.6; x.strokeStyle = 'rgba(150,110,40,' + (0.18 + hash(i + 4)*0.16) + ')'; x.stroke();
+    }
+  }
+  foamPattern = ctx.createPattern(c, 'repeat');
+  // a single bead of water: dark above, bright below, one hard glint
+  var S = 64, R = 23; c = makeCanvas(S, S); x = c.getContext('2d');
+  var g = x.createRadialGradient(33.5, 36.5, R*0.5, 33.5, 36.5, R*1.22);
+  g.addColorStop(0, 'rgba(0,0,0,.26)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.beginPath(); x.arc(33.5, 36.5, R*1.22, 0, TAU); x.fill();
+  x.save(); x.beginPath(); x.arc(32, 32, R, 0, TAU); x.clip();
+  x.fillStyle = 'rgba(255,255,255,.12)'; x.fillRect(0, 0, S, S);
+  g = x.createLinearGradient(0, 32 - R, 0, 32 + R);
+  g.addColorStop(0, 'rgba(18,30,24,.3)'); g.addColorStop(0.5, 'rgba(18,30,24,.04)'); g.addColorStop(1, 'rgba(18,30,24,0)');
+  x.fillStyle = g; x.fillRect(0, 0, S, S);
+  g = x.createRadialGradient(32, 32 + R*0.6, 0, 32, 32 + R*0.6, R*0.95);
+  g.addColorStop(0, 'rgba(255,255,255,.8)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0, 0, S, S);
+  x.restore();
+  x.lineWidth = 1.3; x.strokeStyle = 'rgba(255,255,255,.38)'; x.beginPath(); x.arc(32, 32, R - 0.8, 0, TAU); x.stroke();
+  x.lineWidth = 0.8; x.strokeStyle = 'rgba(8,18,14,.2)'; x.beginPath(); x.arc(32, 32, R + 0.2, 0, TAU); x.stroke();
+  x.fillStyle = 'rgba(255,255,255,.96)'; x.beginPath(); x.ellipse(32 - R*0.36, 32 - R*0.42, R*0.21, R*0.13, -0.6, 0, TAU); x.fill();
+  beadSprite = c;
+}
+function buildFog(){
+  FW = Math.ceil(2.3*fs); FH = Math.ceil(3.5*fs);
+  fogM = makeCanvas(FW, FH); fogMx = fogM.getContext('2d');
+  fogO = makeCanvas(FW, FH); fogOx = fogO.getContext('2d');
+  laceC = makeCanvas(FW, FH); laceX = laceC.getContext('2d');
+  var c = makeCanvas(96, 96), x = c.getContext('2d'), i;
+  x.fillStyle = 'rgba(255,255,255,.46)'; x.fillRect(0, 0, 96, 96);
+  for (i = 0; i < 620; i++){
+    x.beginPath(); x.arc(hash(i*1.3)*96, hash(i*2.9)*96, 0.5 + hash(i*4.7)*1.1, 0, TAU);
+    x.fillStyle = 'rgba(255,255,255,' + (0.18 + hash(i*0.7)*0.4) + ')'; x.fill();
+  }
+  x.globalCompositeOperation = 'destination-out';
+  for (i = 0; i < 260; i++){
+    x.beginPath(); x.arc(hash(i*8.1 + 2)*96, hash(i*6.3 + 5)*96, 0.5 + hash(i*3.3)*1.3, 0, TAU);
+    x.fillStyle = 'rgba(0,0,0,' + (0.25 + hash(i*2.2)*0.4) + ')'; x.fill();
+  }
+  fogPattern = fogOx.createPattern(c, 'repeat');
+  fogSeed = true; fogDirty = true;
+}
+function fX(x){ return (x + 1.15)*fs; }
+function fY(y){ return (y + 1.6)*fs; }
 
 /* ---------- sizing ---------- */
 function resize(){
   var r = stage.getBoundingClientRect();
   W = Math.max(1, r.width); H = Math.max(1, r.height);
-  dpr = Math.min(3, window.devicePixelRatio || 1);
+  dpr = Math.min(2.5, window.devicePixelRatio || 1);
   canvas.width = Math.round(W*dpr); canvas.height = Math.round(H*dpr);
-  u = Math.min(H/4.6, W*0.27);
-  cx = W/2;
-  barY = H - 0.45*u;
-  cyRest = barY - 1.69*u;
-  spoutY = cyRest - (HH + 0.42)*u;
+  u = Math.min(H/5.1, W*0.255);
+  cx = W/2; baseY = H - 0.3*u; barY = baseY - 0.16*u; spoutY = baseY - 3.8*u;
+  var nfs = clamp(Math.round(u*dpr*0.75), 50, 190);
+  if (nfs !== fs){ fs = nfs; buildFog(); }
 }
+buildTextures();
 try { new ResizeObserver(resize).observe(stage); } catch(e){ window.addEventListener('resize', resize); }
 resize();
 
-/* ---------- pour button ---------- */
-function setPour(on){
-  if (pouring === on) return;
-  pouring = on;
-  btn.classList.toggle('down', on);
-  if (on) wake();
+/* =====================================================================
+   Input
+   ===================================================================== */
+function holdButton(el, set){
+  function on(v){ set(v); el.classList.toggle('down', v); if (v) wake(); }
+  el.addEventListener('pointerdown', function(e){ e.preventDefault(); try { el.setPointerCapture(e.pointerId); } catch(err){} on(true); });
+  ['pointerup','pointercancel','lostpointercapture'].forEach(function(n){ el.addEventListener(n, function(){ on(false); }); });
+  el.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  el.addEventListener('keydown', function(e){
+    if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); if (!e.repeat) on(true); }
+  });
+  el.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); on(false); } });
+  el.addEventListener('blur', function(){ on(false); });
 }
-btn.addEventListener('pointerdown', function(e){
-  e.preventDefault(); askMotion();
-  try { btn.setPointerCapture(e.pointerId); } catch(err){}
-  setPour(true);
-});
-['pointerup','pointercancel','lostpointercapture'].forEach(function(n){
-  btn.addEventListener(n, function(){ setPour(false); });
-});
-btn.addEventListener('contextmenu', function(e){ e.preventDefault(); });
-btn.addEventListener('keydown', function(e){
-  if ((e.key === ' ' || e.key === 'Enter') && !e.repeat){ e.preventDefault(); setPour(true); }
-  else if (e.key === ' ' || e.key === 'Enter') e.preventDefault();
-});
-btn.addEventListener('keyup', function(e){ if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); setPour(false); } });
-btn.addEventListener('blur', function(){ setPour(false); });
+holdButton(btnPour, function(v){ pourHeld = v; });
+holdButton(btnSip, function(v){ drinkHeld = v; });
 
-/* ---------- tipping by finger, mouse or arrow keys ---------- */
+function toGlass(clientX, clientY){
+  var r = canvas.getBoundingClientRect();
+  var x = clientX - r.left - P.gxc, y = clientY - r.top - P.cy;
+  var c = Math.cos(-glassAngle), s = Math.sin(-glassAngle), k = 1/(u*P.zoom);
+  return [(x*c - y*s)*k, (x*s + y*c)*k];
+}
 canvas.addEventListener('pointerdown', function(e){
-  askMotion(); wake();
-  if (sensor.on) return;
-  drag = { id:e.pointerId, x0:e.clientX, a0:glassAngle };
-  canvas.classList.add('dragging');
+  wake();
+  var p = toGlass(e.clientX, e.clientY);
+  if (Math.abs(p[0]) < 1.14 && p[1] > -1.66 && p[1] < 1.9){
+    wipes[e.pointerId] = p; wipedOnce = true;
+    wipeStroke(p, p);
+  } else if (!sensor.on){
+    tiltDrag = { id:e.pointerId, x0:e.clientX, a0:glassAngle };
+  }
   try { canvas.setPointerCapture(e.pointerId); } catch(err){}
 });
 canvas.addEventListener('pointermove', function(e){
-  if (!drag || e.pointerId !== drag.id) return;
-  dragTarget = clamp(drag.a0 + (e.clientX - drag.x0)/(W*0.45)*1.9, -2.15, 2.15);
+  var last = wipes[e.pointerId];
+  if (last){
+    var p = toGlass(e.clientX, e.clientY);
+    wipeStroke(last, p); wipes[e.pointerId] = p;
+  } else if (tiltDrag && e.pointerId === tiltDrag.id){
+    dragTarget = clamp(tiltDrag.a0 + (e.clientX - tiltDrag.x0)/(W*0.45)*1.9, -1.15, 1.15);
+  }
 });
-function endDrag(e){
-  if (!drag || (e && e.pointerId !== drag.id)) return;
-  drag = null; dragTarget = 0; canvas.classList.remove('dragging');
+function pointerEnd(e){
+  var last = wipes[e.pointerId];
+  if (last){
+    delete wipes[e.pointerId];
+    if (carried > 0.0004){
+      addBead(last[0] + (Math.random() - 0.5)*0.1, last[1] + BRUSH*0.7, clamp(Math.sqrt(carried)*0.5, 0.02, 0.075), true);
+      carried = 0;
+    }
+  }
+  if (tiltDrag && e.pointerId === tiltDrag.id){ tiltDrag = null; dragTarget = 0; }
 }
-canvas.addEventListener('pointerup', endDrag);
-canvas.addEventListener('pointercancel', endDrag);
-canvas.addEventListener('lostpointercapture', endDrag);
+canvas.addEventListener('pointerup', pointerEnd);
+canvas.addEventListener('pointercancel', pointerEnd);
+canvas.addEventListener('lostpointercapture', pointerEnd);
 window.addEventListener('keydown', function(e){
   if (e.key === 'ArrowLeft'){ keyTilt = -1; e.preventDefault(); }
   else if (e.key === 'ArrowRight'){ keyTilt = 1; e.preventDefault(); }
 });
 window.addEventListener('keyup', function(e){
-  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ keyTilt = 0; if (!drag) dragTarget = 0; }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight'){ keyTilt = 0; if (!tiltDrag) dragTarget = 0; }
 });
 
-/* ---------- the phone's tilt sensor, where the browser hands it over ---------- */
-var motionAsk = 'idle';                     // iPhones only hand the sensor over after a tap and a yes
+/* ---------- the phone's own sensors, where the browser hands them over ---------- */
+var motionAsk = 'idle';                     // iPhones only hand the sensors over after a tap and a yes
 function askMotion(){
   if (motionAsk !== 'idle') return;
   try {
-    var E = window.DeviceOrientationEvent;
+    var E = window.DeviceOrientationEvent, M = window.DeviceMotionEvent;
     if (E && typeof E.requestPermission === 'function'){
       motionAsk = 'asking';
       E.requestPermission().then(function(r){ motionAsk = (r === 'granted') ? 'granted' : 'denied'; })
                            .catch(function(){ motionAsk = 'idle'; });
+      if (M && typeof M.requestPermission === 'function') M.requestPermission().catch(function(){});
     } else motionAsk = 'none';
   } catch(e){ motionAsk = 'idle'; }
 }
 document.addEventListener('touchend', askMotion);
 document.addEventListener('click', askMotion);
+function screenAngle(){
+  var deg = 0;
+  try { deg = (screen.orientation && typeof screen.orientation.angle === 'number') ? screen.orientation.angle : (window.orientation || 0); } catch(err){}
+  return deg*Math.PI/180;
+}
 window.addEventListener('deviceorientation', function(e){
   if (e.beta == null || e.gamma == null || !touchy) return;
   var b = e.beta*Math.PI/180, g = e.gamma*Math.PI/180;
-  var dx = Math.cos(b)*Math.sin(g), dy = -Math.sin(b);       // gravity in the phone's own frame
-  var deg = 0;
-  try { deg = (screen.orientation && typeof screen.orientation.angle === 'number') ? screen.orientation.angle : (window.orientation || 0); } catch(err){}
-  var a = deg*Math.PI/180;
-  var right = dx*Math.cos(a) - dy*Math.sin(a);
-  var down = -(dx*Math.sin(a) + dy*Math.cos(a));
-  if (!sensor.on){ sensor.on = true; sensor.gx = right; sensor.gy = down; drag = null; dragTarget = 0; }
-  sensor.gx += (right - sensor.gx)*0.3;
-  sensor.gy += (down - sensor.gy)*0.3;
+  var dx = Math.cos(b)*Math.sin(g), dy = -Math.sin(b), dz = -Math.cos(b)*Math.cos(g);   // gravity in the phone's frame
+  var a = screenAngle();
+  var sx = dx*Math.cos(a) - dy*Math.sin(a), sy = -(dx*Math.sin(a) + dy*Math.cos(a));
+  var back = Math.atan2(-dz, sy), mag = Math.hypot(sy, dz);     // lean-back angle: 0 upright, 90 degrees lying face up
+  if (back > 0) back = back > REST ? (back - REST)*1.95/(Math.PI/2 - REST) : 0;
+  sensor.px = sx; sensor.py = sy;
+  sensor.rx = sx; sensor.ry = mag*Math.cos(back); sensor.rz = -mag*Math.sin(back);
+  if (!sensor.on){
+    sensor.on = true; sensor.x = sensor.rx; sensor.y = sensor.ry; sensor.z = sensor.rz;
+    tiltDrag = null; dragTarget = 0; drinkHeld = false; btnSip.hidden = true;
+  }
+});
+window.addEventListener('devicemotion', function(e){         // a shake sends the beer sloshing
+  var a = e.acceleration;
+  if (!a || a.x == null || !sensor.on) return;
+  var s = screenAngle();
+  sensor.ax = clamp(a.x*Math.cos(s) - a.y*Math.sin(s), -14, 14);
+  sensor.ay = clamp(-(a.x*Math.sin(s) + a.y*Math.cos(s)), -14, 14);
 });
 
 var wakeLock = null;
@@ -331,227 +507,737 @@ function wake(){
   try { navigator.wakeLock.request('screen').then(function(l){ wakeLock = l; l.addEventListener('release', function(){ wakeLock = null; }); }).catch(function(){}); } catch(e){}
 }
 
-/* ---------- status line ---------- */
-function statusText(now, upright, total){
-  if (pouring && !upright) return sensor.on ? 'Stand your phone up to pour.' : 'Stand the glass up to pour.';
-  if (pouring && total >= FULL_ML - 3) return 'Brim-full. The rest goes on the bar.';
-  if (pouring) return 'Pouring…';
-  if (spillVis > 0.08) return 'Down it goes.';
-  if (now - doneAt < 3500) return 'Empty. That was pint number ' + count + '.';
-  if (total < 1) return 'Empty glass. Hold the tap to fill it.';
-  var how = sensor.on ? 'Tip your phone back to drink' : 'Drag the glass sideways to drink';
-  if (total >= LINE_ML - 5) return 'Full to the line. ' + how + '.';
-  return how + '.';
+/* =====================================================================
+   Condensation: a fog mask you can wipe, and beads that grow and run
+   ===================================================================== */
+function addBead(x, y, r, eager){
+  if (beads.length > 330) return;
+  beads.push({ x:x, y:y, r:r, crit: eager ? r*0.8 : 0.052 + Math.random()*0.034, run:false, v:0,
+               stick:0, next:0.3 + Math.random(), seed:Math.random()*10, trail:0, grow:0.6 + Math.random()*0.9 });
+}
+function wipeStroke(a, b){
+  var f = fogMx, dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy);
+  f.save(); f.lineCap = 'round'; f.lineJoin = 'round';
+  f.globalCompositeOperation = 'destination-out';
+  f.strokeStyle = 'rgba(0,0,0,.5)'; f.lineWidth = BRUSH*2.3*fs;
+  f.beginPath(); f.moveTo(fX(a[0]), fY(a[1])); f.lineTo(fX(b[0]) + 0.01, fY(b[1])); f.stroke();
+  f.strokeStyle = '#000'; f.lineWidth = BRUSH*1.8*fs;
+  f.beginPath(); f.moveTo(fX(a[0]), fY(a[1])); f.lineTo(fX(b[0]) + 0.01, fY(b[1])); f.stroke();
+  if (len > 0.01){                                          // the faint streaks a wet finger leaves
+    var nx = -dy/len, ny = dx/len;
+    f.globalCompositeOperation = 'source-over'; f.strokeStyle = 'rgba(255,255,255,.085)'; f.lineWidth = Math.max(1, fs*0.012);
+    for (var k = 0; k < 3; k++){
+      var o = (hash(k*3.7 + 1) - 0.5)*BRUSH*1.5;
+      f.beginPath(); f.moveTo(fX(a[0] + nx*o), fY(a[1] + ny*o)); f.lineTo(fX(b[0] + nx*o), fY(b[1] + ny*o)); f.stroke();
+    }
+  }
+  f.restore(); fogDirty = true;
+  // beads under the finger are swept up
+  for (var i = beads.length - 1; i >= 0; i--){
+    var q = beads[i], t = len > 1e-6 ? clamp(((q.x - a[0])*dx + (q.y - a[1])*dy)/(len*len), 0, 1) : 0;
+    var d = Math.hypot(q.x - (a[0] + dx*t), q.y - (a[1] + dy*t));
+    if (d < BRUSH*0.92 + q.r*0.5){ carried += q.r*q.r; beads.splice(i, 1); }
+  }
+  // and some of that water is left as a line of small beads along the edge of the swath
+  wipeDist += len;
+  while (wipeDist > 0.055 && len > 0.01){
+    wipeDist -= 0.055;
+    if (carried < 0.00012) continue;
+    var side = Math.random() < 0.5 ? -1 : 1, rr = 0.006 + Math.random()*0.009;
+    addBead(b[0] + (-dy/len)*side*BRUSH*(1.0 + Math.random()*0.1), b[1] + (dx/len)*side*BRUSH*(1.0 + Math.random()*0.1), rr, false);
+    carried -= rr*rr;
+  }
+}
+function fogTick(rate){
+  var f = fogMx, total = beer + foam;
+  if (rate < 1 && ++fogTicks % 10 === 0){                    // it slowly dries off, faster once the glass is empty
+    f.globalCompositeOperation = 'destination-out';
+    f.fillStyle = 'rgba(0,0,0,' + (total > 15 ? 0.05 : 0.14) + ')'; f.fillRect(0, 0, FW, FH);
+  }
+  f.globalCompositeOperation = 'source-over';
+  if (total > 15 && chill > 0.05){
+    f.save(); f.beginPath();
+    for (var i = 0; i < OUTER.length; i++){ if (i) f.lineTo(fX(OUTER[i][0]), fY(OUTER[i][1])); else f.moveTo(fX(OUTER[i][0]), fY(OUTER[i][1])); }
+    f.closePath(); f.clip();
+    var c = L.cT, gr = f.createLinearGradient(fX(L.gx*(c - 0.2)), fY(L.gy*(c - 0.2)), fX(L.gx*(c + 0.04)), fY(L.gy*(c + 0.04)));
+    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,' + clamp(rate*chill, 0, 1) + ')');
+    f.fillStyle = gr; f.fillRect(0, 0, FW, FH); f.restore();
+    fogAmt += (1 - fogAmt)*rate;
+  } else fogAmt *= 0.985;
+  fogDirty = true;
+}
+function seedCold(){                                       // open on a glass that has been standing a while
+  for (var k = 0; k < 4; k++) fogTick(1);
+  fogAmt = 1; beads.length = 0;
+  for (var i = 0; i < 900 && beads.length < 150; i++){
+    var x = (Math.random()*2 - 1)*1.05, y = lerp(-1.5, 1.75, Math.random());
+    if (x*L.gx + y*L.gy < L.cT - 0.03 || !inOuter(x, y)) continue;
+    var h = Math.random(); addBead(x, y, 0.005 + h*h*h*0.04, false);
+  }
+  mergeBeads(); mergeBeads();
+}
+function mergeBeads(){
+  for (var i = 0; i < beads.length; i++){
+    var a = beads[i]; if (!a) continue;
+    for (var j = i + 1; j < beads.length; j++){
+      var b = beads[j], dx = a.x - b.x, dy = a.y - b.y, rr = (a.r + b.r)*0.9;
+      if (dx*dx + dy*dy < rr*rr){
+        var big = a.r >= b.r ? a : b, small = big === a ? b : a, m = big.r*big.r + small.r*small.r;
+        var w = small.r*small.r/m;
+        big.x += (small.x - big.x)*w; big.y += (small.y - big.y)*w; big.r = Math.min(0.085, Math.sqrt(m)); big.run = big.run || small.run;
+        if (big !== a){ beads[i] = big; a = big; }
+        beads.splice(j, 1); j--;
+      }
+    }
+  }
+}
+function stepBeads(dt){
+  var total = beer + foam, f = fogMx, cold = total > 20 && chill > 0.3;
+  var bgx = sensor.on ? sensor.bx : Math.sin(roll)*planeM, bgy = sensor.on ? sensor.by : Math.cos(roll)*planeM;
+  var m = Math.hypot(bgx, bgy), gx = m > 0.01 ? bgx/m : 0, gy = m > 0.01 ? bgy/m : 1;
+  // new beads nucleate where the glass is cold
+  if (cold && beads.length < 280){
+    beadAcc += dt*24*chill;
+    while (beadAcc >= 1){
+      beadAcc -= 1;
+      for (var k = 0; k < 5; k++){
+        var x = (Math.random()*2 - 1)*1.05, y = lerp(-1.5, 1.75, Math.random());
+        if (x*L.gx + y*L.gy < L.cT - 0.02 || !inOuter(x, y)) continue;
+        addBead(x, y, 0.005 + Math.random()*0.004, false); break;
+      }
+    }
+  }
+  for (var i = beads.length - 1; i >= 0; i--){
+    var b = beads[i];
+    if (!b.run){
+      var inCold = cold && (b.x*L.gx + b.y*L.gy >= L.cT - 0.08);
+      b.r += (inCold ? 0.0019*b.grow*chill : -0.0011)*dt;
+      if (b.r < 0.0045){ beads.splice(i, 1); continue; }
+      if (b.r > b.crit && m > 0.25){ b.run = true; b.v = 0.03; }
+      continue;
+    }
+    // a running bead sticks, lets go, wanders, and drinks whatever it rolls over
+    b.next -= dt;
+    if (b.next <= 0){ b.stick = Math.random() < 0.45 ? 0.06 + Math.random()*0.32 : 0; b.next = 0.25 + Math.random()*0.9; }
+    b.stick -= dt;
+    var vt = b.stick > 0 ? 0.015 : clamp(0.2 + 190*(b.r - 0.03)*(b.r - 0.03), 0.2, 1.7)*m;
+    b.v += (vt - b.v)*ease(dt, b.stick > 0 ? 16 : 4.5);
+    var wob = Math.sin(b.y*11 + b.seed*5)*0.28 + Math.sin(b.y*29 + b.seed)*0.1;
+    var dx = (gx + gy*wob)*b.v*dt, dy = (gy - gx*wob)*b.v*dt, ox = b.x, oy = b.y;
+    b.x += dx; b.y += dy;
+    f.save(); f.globalCompositeOperation = 'destination-out'; f.lineCap = 'round';
+    f.strokeStyle = 'rgba(0,0,0,.85)'; f.lineWidth = Math.max(1.5, b.r*1.75*fs);
+    f.beginPath(); f.moveTo(fX(ox), fY(oy)); f.lineTo(fX(b.x), fY(b.y)); f.stroke(); f.restore(); fogDirty = true;
+    b.trail += Math.hypot(dx, dy);
+    if (b.trail > 0.09 + hash(b.seed + b.y)*0.12){
+      b.trail = 0; var tr = 0.005 + Math.random()*0.006;
+      addBead(ox - gx*(b.r + tr + 0.012) + (Math.random() - 0.5)*b.r*0.5, oy - gy*(b.r + tr + 0.012), tr, false);
+      b.r = Math.sqrt(Math.max(0.0001, b.r*b.r - tr*tr*1.5));
+    }
+    if (b.r > 0.08) b.r = 0.08;
+    if (!inOuter(b.x, b.y)){ beads.splice(i, 1); continue; }
+    if (b.r < 0.028){ b.run = false; b.crit = b.r + 0.022 + Math.random()*0.03; }
+  }
+  mergeBeads();
 }
 
-/* ---------- drawing helpers ---------- */
-function trace(p, close){
-  ctx.beginPath();
-  for (var i = 0; i < p.length; i++){ if (i) ctx.lineTo(p[i][0], p[i][1]); else ctx.moveTo(p[i][0], p[i][1]); }
-  if (close) ctx.closePath();
+/* =====================================================================
+   Liquid: levels, surface waves, bubbles
+   ===================================================================== */
+function computeLevels(){
+  var gx = Math.sin(liq), gy = Math.cos(liq), r = range(gx, gy);
+  L.gx = gx; L.gy = gy; L.cMin = r[0]; L.cMax = r[1];
+  L.cT = levelFor((beer + foam)/ML, gx, gy, r);
+  L.cB = levelFor(beer/ML, gx, gy, r);
+  L.chT = chord(gx, gy, clamp(L.cT, r[0] + 0.004, r[1] - 0.004));
+  L.chB = chord(gx, gy, clamp(L.cB, r[0] + 0.004, r[1] - 0.004));
 }
-function brassGradient(x0, x1){
+function waveAt(xi){
+  var f = clamp(xi, 0, 1)*(NW - 1), i = Math.floor(f), t = f - i;
+  return i >= NW - 1 ? waveH[NW - 1] : waveH[i] + (waveH[i + 1] - waveH[i])*t;
+}
+function waveKick(xi, amount, spread){
+  var c = clamp(xi, 0, 1)*(NW - 1);
+  for (var i = 0; i < NW; i++){ var d = (i - c)/(spread || 2.2); waveV[i] += amount*Math.exp(-d*d); }
+}
+function stepWaves(dt){
+  var i, mean = 0, damp = calm ? 9 : 2.4;
+  for (i = 0; i < NW; i++){
+    var l = waveH[i > 0 ? i - 1 : 0], r = waveH[i < NW - 1 ? i + 1 : NW - 1];
+    waveV[i] += (1100*(l + r - 2*waveH[i]) - 10*waveH[i] - damp*waveV[i])*dt;
+  }
+  for (i = 0; i < NW; i++){ waveH[i] = clamp(waveH[i] + waveV[i]*dt, -0.11, 0.11); mean += waveH[i]; }
+  mean /= NW;
+  for (i = 0; i < NW; i++) waveH[i] -= mean;
+}
+function addBubble(x, y, vx, vy, r){
+  if (bubbles.length > 170) return;
+  bubbles.push({ x:x, y:y, vx:vx, vy:vy, r:r, ph:Math.random()*TAU, age:0 });
+}
+function stepBubbles(dt){
+  var gx = L.gx, gy = L.gy, tx = gy, ty = -gx, i;
+  if (beer > 12){
+    for (i = 0; i < SITES.length; i++){                    // strings of beads from fixed spots on the glass
+      var s = SITES[i]; s.t -= dt*fizz*(calm ? 0.4 : 1);
+      if (s.t <= 0){
+        s.t = s.every*(0.75 + Math.random()*0.5);
+        if (s.x*gx + s.y*gy > L.cB + 0.12) addBubble(s.x + (Math.random() - 0.5)*0.012, s.y - 0.02, 0, 0, 0.006 + Math.random()*0.0045);
+      }
+    }
+  }
+  for (i = bubbles.length - 1; i >= 0; i--){
+    var b = bubbles[i]; b.age += dt;
+    var lift = 1.0 + b.r*34, wob = Math.sin(b.age*7.5 + b.ph)*0.55;
+    b.vx += (-gx*lift + tx*wob - b.vx*2.6)*dt; b.vy += (-gy*lift + ty*wob - b.vy*2.6)*dt;
+    b.x += b.vx*dt; b.y += b.vy*dt; b.r += 0.0022*dt;
+    if (b.x*gx + b.y*gy < L.cB + b.r || b.age > 9){
+      if (foam < 6 && b.r > 0.014 && L.chB) waveKick((b.x*gy - b.y*gx - L.chB[0])/(L.chB[1] - L.chB[0]), 0.05, 0.8);
+      bubbles.splice(i, 1);
+    }
+  }
+  for (i = splash.length - 1; i >= 0; i--){
+    var p = splash[i]; p.life += dt;
+    p.vx += gx*32*dt; p.vy += gy*32*dt; p.x += p.vx*dt; p.y += p.vy*dt;
+    if (p.life > 0.8 || (p.life > 0.08 && p.x*gx + p.y*gy > L.cT + 0.02)) splash.splice(i, 1);
+  }
+}
+
+/* =====================================================================
+   One fixed step of the simulation (1/120 s)
+   ===================================================================== */
+function step(dt, now){
+  // 1. how the glass sits relative to gravity
+  if (sensor.on){
+    var k = ease(dt, 22);
+    sensor.x += (sensor.rx - sensor.x)*k; sensor.y += (sensor.ry - sensor.y)*k; sensor.z += (sensor.rz - sensor.z)*k;
+    sensor.bx += (sensor.px - sensor.bx)*k; sensor.by += (sensor.py - sensor.by)*k;
+    planeM = Math.hypot(sensor.x, sensor.y);
+    if (planeM > 0.2) roll = Math.atan2(sensor.x, sensor.y);
+    phi = Math.acos(clamp(sensor.y, -1, 1));
+    pitchTot = Math.asin(clamp(Math.abs(sensor.z), 0, 1));
+    glassVel += (-glassAngle*140 - glassVel*20)*dt; glassAngle += glassVel*dt;
+    pitch += (0 - pitch)*ease(dt, 5);
+  } else {
+    if (keyTilt) dragTarget = clamp(dragTarget + keyTilt*2*dt, -1.15, 1.15);
+    var stiff = (tiltDrag || keyTilt) ? 260 : 130, dmp = (tiltDrag || keyTilt) ? 30 : 15;
+    glassVel += ((dragTarget - glassAngle)*stiff - glassVel*dmp)*dt; glassAngle += glassVel*dt;
+    pitch += ((drinkHeld ? 1.95 : 0) - pitch)*ease(dt, drinkHeld ? 1.3 : 5);
+    roll = glassAngle; pitchTot = Math.min(pitch, Math.PI/2); planeM = Math.max(0, Math.cos(pitch));
+    phi = Math.acos(clamp(Math.cos(roll)*Math.cos(pitch), -1, 1));
+  }
+  rollShare = phi > 0.05 ? clamp(Math.abs(roll)/phi, 0, 1) : 0;
+
+  // 2. the body of beer swings after it, a shake pushes it sideways
+  var shove = sensor.on ? clamp(-sensor.ax/9.8, -0.7, 0.7) : 0;
+  var acc2 = wrap(roll + shove - liq)*200 - liqVel*(calm ? 28 : 5.2);
+  liqVel += acc2*dt; liq = wrap(liq + liqVel*dt);
+  var stir = Math.abs(liqVel)*0.9 + (sensor.on ? Math.abs(sensor.ay)*0.25 + Math.abs(sensor.ax)*0.12 : 0);
+  if (stir > 0.02 && !calm){
+    for (var i = 0; i < NW; i += 2) waveV[i] += (Math.random() - 0.5)*stir*1.5*dt*10;
+    if (stir > 1.4 && beer > 60 && foam < 150){ var ag = Math.min(beer, (stir - 1.4)*14*dt); foam += ag; beer -= ag*0.3; fizz = Math.min(1, fizz + ag*0.01); }
+  }
+  sensor.ax *= 1 - ease(dt, 6); sensor.ay *= 1 - ease(dt, 6);
+
+  // 3. tap: the handle swings, the stream has a head and a tail
+  var upright = phi < 0.42 && !drinkHeld, wantOpen = pourHeld && upright;
+  handleV += (((wantOpen ? 1 : 0) - handle)*260 - handleV*22)*dt; handle += handleV*dt;
+  var open = clamp(handle, 0, 1), last = segs.length ? segs[segs.length - 1] : null;
+  if (open > 0.14 && wantOpen){
+    if (!last || !last.attached){ last = { top:0, vt:0, bot:0, vb:V0, attached:true, flow:open }; segs.push(last); drips.length = 0; }
+    last.flow = open;
+  } else if (last && last.attached && open < 0.5){
+    last.attached = false; last.vt = V0;
+    drips = [{ wait:0.5, r:0, y:0, vy:0, fall:false }, { wait:1.35, r:0, y:0, vy:0, fall:false }, { wait:2.9, r:0, y:0, vy:0, fall:false }];
+  }
+  var total = beer + foam, hit = 0, D = streamD;
+  for (var j = segs.length - 1; j >= 0; j--){
+    var sg = segs[j];
+    if (sg.bot < D){ sg.vb += G*dt; sg.bot += sg.vb*dt; }
+    if (sg.bot >= D){ sg.bot = D; if (sg.top < D) hit = Math.max(hit, Math.pow(sg.flow, 1.3)); }
+    if (!sg.attached){ sg.vt += G*dt; sg.top += sg.vt*dt; if (sg.top >= D) segs.splice(j, 1); }
+  }
+  if (hit > 0){
+    var add = POUR_RATE*hit*dt, fall = clamp(D/3.7, 0, 1);
+    var ff = clamp(0.12 + 0.32*fall*fall + (beer < 45 ? 0.22 : 0), 0, 0.7);
+    beer += add*(1 - ff); foam += add*ff;
+    haze = Math.min(1, haze + hit*dt*1.6); fizz = Math.min(1, fizz + dt*0.5);
+    var xi = L.chT ? (0 - L.chT[0])/(L.chT[1] - L.chT[0]) : 0.5;
+    waveKick(xi, -(0.16 + Math.random()*0.3)*hit*dt*10, 3.6);
+    bubAcc += hit*dt*(calm ? 30 : 95); splashAcc += hit*dt*(beer < 30 ? 60 : 16 + 26*fall);
+  }
+
+  // 4. the head settles, the haze clears, the fizz slowly goes
+  var settle = foam*0.028*clamp(foam/60, 0.25, 1)*dt; foam -= settle; beer += settle*0.24;
+  haze *= 1 - ease(dt, hit > 0 ? 0 : 0.42);
+  fizz = Math.max(0.3, fizz - dt*0.004);
+  chill += (((beer + foam) > 20 ? 1 : 0) - chill)*ease(dt, 0.35);
+
+  // 5. whatever no longer fits leaves over the rim
+  total = beer + foam;
+  var cap = Math.min(retainAt(liq), retainAt((liq >= 0 ? 1 : -1)*phi))*ML, out = 0;
+  if (total > cap){
+    var ex = total - cap;
+    gulp += dt*TAU*1.7;
+    var swallow = 150*(0.5 + 0.5*Math.pow(0.5 + 0.5*Math.sin(gulp), 2));
+    var maxRate = lerp(swallow, 420, rollShare*rollShare);
+    out = phi < 0.3 ? ex : Math.min(ex, Math.min(maxRate, 9*Math.pow(ex, 0.75) + 18)*dt);
+    if (phi < 0.3 && Math.random() < dt*5) addBead((Math.random() < 0.5 ? -1 : 1)*(0.55 + Math.random()*0.4), -1.44, 0.03 + Math.random()*0.03, true);
+    var fo = Math.min(foam, out*lerp(Math.min(1, foam/total*0.85), 1, rollShare)); foam -= fo; beer = Math.max(0, beer - (out - fo));
+    spillFoam += ((out > 0 ? fo/out : 0) - spillFoam)*ease(dt, 8);
+    if (!calm) waveV[(Math.random()*NW)|0] += (Math.random() - 0.5)*out*0.9;
+    total = beer + foam;
+  }
+  var tipped = Math.abs(liq) > 0.2 && rollShare > 0.3;
+  spillVis += ((tipped ? clamp(out/dt/260, 0, 1) : 0) - spillVis)*ease(dt, 10);
+  if (out > 0) spillVis = Math.max(spillVis, 0);
+  if (total > peak) peak = total;
+  if (total < 4 && !pourHeld && hit === 0 && !segs.length && peak > 0){
+    if (peak > 200){ count++; saveCount(); doneAt = now; }
+    beer = 0; foam = 0; peak = 0;
+  }
+  stepWaves(dt);
+  return { upright:upright, hit:hit, out:out };
+}
+
+/* =====================================================================
+   Painting
+   ===================================================================== */
+function rr(x, y, w, h, r){
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x, y, w, h, r);
+  else { ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+}
+function brassH(x0, x1){
   var g = ctx.createLinearGradient(x0, 0, x1, 0);
-  g.addColorStop(0, T.brassLo); g.addColorStop(0.3, T.brass); g.addColorStop(0.45, T.brassHi);
-  g.addColorStop(0.7, T.brass); g.addColorStop(1, T.brassLo);
+  g.addColorStop(0, T.brassLo); g.addColorStop(0.22, T.brass); g.addColorStop(0.4, T.brassHi);
+  g.addColorStop(0.62, T.brass); g.addColorStop(1, T.brassLo);
   return g;
 }
 function drawTap(){
-  var w = 0.26*u;
-  ctx.fillStyle = brassGradient(cx - w, cx + w);
-  ctx.fillRect(cx - w, -4, 2*w, Math.max(0, spoutY - 0.46*u + 4));
-  ctx.beginPath();
-  ctx.moveTo(cx - w, spoutY - 0.47*u); ctx.lineTo(cx + w, spoutY - 0.47*u);
-  ctx.lineTo(cx + 0.14*u, spoutY); ctx.lineTo(cx - 0.14*u, spoutY); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = brassGradient(cx - 1.5*w, cx + 1.5*w);
-  var cy0 = spoutY - 0.64*u, ch = 0.17*u;
-  ctx.beginPath();
-  if (ctx.roundRect) ctx.roundRect(cx - 1.5*w, cy0, 3*w, ch, 0.05*u); else ctx.rect(cx - 1.5*w, cy0, 3*w, ch);
-  ctx.fill();
+  var x = cx, y = spoutY, g;
+  ctx.fillStyle = brassH(x - 0.2*u, x + 0.2*u); ctx.fillRect(x - 0.2*u, -8, 0.4*u, Math.max(0, y - 0.86*u + 8));
+  // the lever swings down as the tap opens, with a little overshoot from its spring
+  ctx.save(); ctx.translate(x + 0.08*u, y - 0.7*u); ctx.rotate(lerp(-0.34, 0.6, clamp(handle, -0.15, 1.15)));
+  g = ctx.createLinearGradient(0, -0.07*u, 0, 0.07*u); g.addColorStop(0, T.brassHi); g.addColorStop(0.5, T.brass); g.addColorStop(1, T.brassLo);
+  ctx.fillStyle = g; rr(0, -0.055*u, 0.82*u, 0.11*u, 0.05*u); ctx.fill();
+  ctx.fillStyle = T.knob; rr(0.7*u, -0.115*u, 0.46*u, 0.23*u, 0.115*u); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.22)'; rr(0.77*u, -0.085*u, 0.3*u, 0.045*u, 0.022*u); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = brassH(x - 0.34*u, x + 0.34*u); rr(x - 0.34*u, y - 0.95*u, 0.68*u, 0.5*u, 0.1*u); ctx.fill();
+  g = ctx.createLinearGradient(0, y - 0.95*u, 0, y - 0.45*u); g.addColorStop(0, 'rgba(255,255,255,.22)'); g.addColorStop(0.35, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(0,0,0,.28)');
+  ctx.fillStyle = g; rr(x - 0.34*u, y - 0.95*u, 0.68*u, 0.5*u, 0.1*u); ctx.fill();
+  ctx.fillStyle = brassH(x - 0.2*u, x + 0.2*u);
+  ctx.beginPath(); ctx.moveTo(x - 0.2*u, y - 0.47*u); ctx.lineTo(x + 0.2*u, y - 0.47*u); ctx.lineTo(x + 0.118*u, y - 0.04*u); ctx.lineTo(x - 0.118*u, y - 0.04*u); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = brassH(x - 0.14*u, x + 0.14*u); rr(x - 0.14*u, y - 0.075*u, 0.28*u, 0.075*u, 0.03*u); ctx.fill();
+  g = ctx.createRadialGradient(x + 0.06*u, y - 0.72*u, 0, x + 0.08*u, y - 0.7*u, 0.1*u); g.addColorStop(0, T.brassHi); g.addColorStop(1, T.brassLo);
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x + 0.08*u, y - 0.7*u, 0.095*u, 0, TAU); ctx.fill();
 }
-
-/* ---------- one frame: physics, then paint ---------- */
-function frame(now){
-  var dt = Math.min(0.05, Math.max(0.001, (now - lastT)/1000)); lastT = now;
-
-  // how the glass sits relative to gravity
-  var target, phi;
-  if (sensor.on){
-    if (Math.hypot(sensor.gx, sensor.gy) > 0.2) planeAngle = Math.atan2(sensor.gx, sensor.gy);
-    glassAngle += (0 - glassAngle)*(1 - Math.exp(-dt*12));
-    target = planeAngle; phi = Math.acos(clamp(sensor.gy, -1, 1));
-  } else {
-    if (keyTilt) dragTarget = clamp(dragTarget + keyTilt*2*dt, -2.15, 2.15);
-    glassAngle += (dragTarget - glassAngle)*(1 - Math.exp(-dt*12));
-    target = glassAngle; phi = Math.abs(glassAngle);
-  }
-  // the liquid lags behind and sloshes
-  liqVel += (wrap(target - liq)*70 - liqVel*(calm ? 17 : 7))*dt;
-  liq = wrap(liq + liqVel*dt);
-  var upright = phi < 0.5;
-
-  // pouring
-  flow += (((pouring && upright) ? 1 : 0) - flow)*(1 - Math.exp(-dt*10));
-  if (flow > 0.02){ var add = POUR_RATE*flow*dt; beer += add*0.78; foam += add*0.22; }
-  var settle = foam*0.05*dt; foam -= settle; beer += settle*0.2;
-
-  // whatever no longer fits runs out over the rim
-  var cap = Math.min(retainAt(liq), retainAt((liq >= 0 ? 1 : -1)*phi))*ML;
-  var total = beer + foam, spill = 0;
-  if (total > cap){
-    var ex = total - cap, out = Math.min(ex, ex*(1 - Math.exp(-dt*7)) + 25*dt);
-    spill = out/dt;
-    var f = Math.min(foam, out); foam -= f; beer = Math.max(0, beer - (out - f));
-    total = beer + foam;
-  }
-  var tipped = Math.abs(liq) > 0.2 || phi > 0.35;
-  spillVis += ((tipped ? clamp(spill/160, 0, 1) : 0) - spillVis)*(1 - Math.exp(-dt*9));
-  if (total > peak) peak = total;
-  if (total < 4 && !pouring && flow < 0.05 && peak > 0){
-    if (peak > 200){ count++; saveCount(); doneAt = now; }
-    beer = 0; foam = 0; total = 0; peak = 0;
-  }
-
-  // levels
-  var gx = Math.sin(liq), gy = Math.cos(liq);
-  var cT = levelFor(total/ML, gx, gy), cB = levelFor(beer/ML, gx, gy), cMax = range(gx, gy)[1];
-
-  // bubbles
-  spawnAcc += dt*((beer/FULL_ML)*(calm ? 5 : 14) + flow*(calm ? 8 : 40));
-  while (spawnAcc >= 1){
-    spawnAcc -= 1;
-    if (bubbles.length > 70) continue;
-    for (var k = 0; k < 4; k++){
-      var bx = Math.random()*2 - 1, by = (Math.random()*2 - 1)*HH;
-      if (bx*gx + by*gy < cB + 0.1 || !insidePoly(bx, by)) continue;
-      bubbles.push({ x:bx, y:by, r:0.018 + Math.random()*0.034, s:0.35 + Math.random()*0.55, ph:Math.random()*6.28 });
-      break;
+function streamHalf(yy, flow, t){            // a falling stream thins as it speeds up
+  return STREAM_W*Math.sqrt(flow)*Math.pow(1 + 2*G*yy/(V0*V0), -0.25)*(1 + Math.sin(yy*9 - t*23)*0.06*Math.min(1, yy));
+}
+function drawStreams(now){
+  var t = now/1000, D = streamD, i, k;
+  for (i = 0; i < segs.length; i++){
+    var s = segs[i], top = s.top, bot = Math.min(s.bot, D);
+    if (bot - top < 0.015) continue;
+    var n = Math.max(5, Math.ceil((bot - top)/0.1)), L1 = [], R1 = [];
+    for (k = 0; k <= n; k++){
+      var yy = top + (bot - top)*k/n, w = streamHalf(yy, s.flow, t);
+      var sway = Math.sin(yy*4.6 - t*13)*0.0045*yy;
+      if (s.bot < D && k === n) w *= 0.35;                    // rounded leading head
+      if (s.bot < D && k === n - 1) w *= 1.25;
+      if (!s.attached && k === 0) w *= 0.3;                   // and a pinched tail
+      L1.push([cx + (sway - w)*u, spoutY + yy*u]); R1.push([cx + (sway + w)*u, spoutY + yy*u]);
+    }
+    ctx.beginPath(); ctx.moveTo(L1[0][0], L1[0][1]);
+    for (k = 1; k <= n; k++) ctx.lineTo(L1[k][0], L1[k][1]);
+    for (k = n; k >= 0; k--) ctx.lineTo(R1[k][0], R1[k][1]);
+    ctx.closePath();
+    var g = ctx.createLinearGradient(cx - STREAM_W*u, 0, cx + STREAM_W*u, 0);
+    g.addColorStop(0, T.beerDeep); g.addColorStop(0.3, T.beer); g.addColorStop(0.5, T.beerTop); g.addColorStop(0.75, T.beer); g.addColorStop(1, T.beerDeep);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = Math.max(0.8, u*0.012); ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (k = 0; k <= n; k++){ var hx = lerp(L1[k][0], R1[k][0], 0.3); if (k) ctx.lineTo(hx, L1[k][1]); else ctx.moveTo(hx, L1[k][1]); }
+    ctx.stroke();
+    if (!s.attached){                                          // the tail breaks into drops
+      ctx.fillStyle = T.beer;
+      for (k = 1; k <= 3; k++){
+        var dy = top - k*0.11 - s.vt*0.004*k*k;
+        if (dy > 0.02){ ctx.beginPath(); ctx.ellipse(cx, spoutY + dy*u, u*0.022*(1 - k*0.18), u*0.034*(1 - k*0.18), 0, 0, TAU); ctx.fill(); }
+      }
     }
   }
-  for (var i = bubbles.length - 1; i >= 0; i--){
-    var bb = bubbles[i], wob = Math.cos(now*0.004 + bb.ph)*0.07*dt;
-    bb.x += -gx*bb.s*dt + gy*wob; bb.y += -gy*bb.s*dt - gx*wob;
-    if (bb.x*gx + bb.y*gy < cB + bb.r) bubbles.splice(i, 1);
+  ctx.fillStyle = T.beer;
+  for (i = 0; i < drips.length; i++){
+    var d = drips[i];
+    if (d.fall){ ctx.beginPath(); ctx.ellipse(cx, spoutY + d.y*u, u*0.03, u*0.03*(1 + Math.min(1.2, d.vy*0.07)), 0, 0, TAU); ctx.fill(); }
+    else if (d.r > 0.002){ ctx.beginPath(); ctx.ellipse(cx, spoutY + d.r*u*0.7, d.r*u*0.85, d.r*u*1.05, 0, 0, TAU); ctx.fill(); }
+  }
+}
+function surfaceArc(c, ch, sign, seed, lump, now, calmBy){
+  var gx = L.gx, gy = L.gy, s0 = ch[0], s1 = ch[1], ry = P.e*(s1 - s0)/2, n = 30, pts = new Array(n + 1);
+  for (var i = 0; i <= n; i++){
+    var xi = i/n, k = Math.sqrt(Math.max(0, 1 - (2*xi - 1)*(2*xi - 1))), d = c + sign*ry*k - waveAt(xi)*(calmBy || 1);
+    if (lump) d -= lump*(noise1(xi*6.5 + seed + now*0.00011) + 0.5*noise1(xi*15 + seed*2 - now*0.00017) - 0.6)*Math.min(1, k*2.5);
+    pts[i] = [gx*d + gy*(s0 + (s1 - s0)*xi), gy*d - gx*(s0 + (s1 - s0)*xi)];
+  }
+  return pts;
+}
+function halfPath(pts, dir){                 // everything on one side of a surface line
+  var gx = L.gx, gy = L.gy, tx = gy, ty = -gx, a = pts[0], b = pts[pts.length - 1], F = 7*dir;
+  ctx.beginPath(); ctx.moveTo(a[0] - tx*4, a[1] - ty*4);
+  for (var i = 0; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+  ctx.lineTo(b[0] + tx*4, b[1] + ty*4); ctx.lineTo(b[0] + tx*4 + gx*F, b[1] + ty*4 + gy*F);
+  ctx.lineTo(a[0] - tx*4 + gx*F, a[1] - ty*4 + gy*F); ctx.closePath();
+}
+function lensPath(back, front){
+  ctx.beginPath(); ctx.moveTo(back[0][0], back[0][1]);
+  for (var i = 1; i < back.length; i++) ctx.lineTo(back[i][0], back[i][1]);
+  for (i = front.length - 1; i >= 0; i--) ctx.lineTo(front[i][0], front[i][1]);
+  ctx.closePath();
+}
+function drawLiquid(inner, now){
+  var total = beer + foam; if (total < 0.6 || !L.chT) return;
+  var gx = L.gx, gy = L.gy, px = 1/(u*P.zoom), i, g;
+  var thick = L.cB - L.cT, hasFoam = foam > 1.2 && thick > 0.004, lump = hasFoam ? Math.min(0.055, thick*0.6) : 0;
+  var soft = hasFoam ? 1/(1 + thick*9) : 1;
+  var backT = surfaceArc(L.cT, L.chT, -1, 3.1, lump, now, soft), frontT = surfaceArc(L.cT, L.chT, 1, 9.7, lump*0.5, now, soft);
+  var hasBeer = beer > 0.6 && L.chB, backB = null, frontB = null;
+  ctx.save(); ctx.clip(inner);
+  if (hasBeer){
+    backB = surfaceArc(L.cB, L.chB, -1, 0, 0, now, soft); frontB = surfaceArc(L.cB, L.chB, 1, 0, 0, now, soft);
+    halfPath(backB, 1);
+    g = ctx.createLinearGradient(gx*L.cB, gy*L.cB, gx*L.cMax, gy*L.cMax);
+    g.addColorStop(0, T.beerTop); g.addColorStop(0.42, T.beer); g.addColorStop(1, T.beerDeep);
+    ctx.fillStyle = g; ctx.fill();
+    g = ctx.createLinearGradient(-1.03, 0, 1.03, 0);       // a round glass reads darker toward its edges
+    g.addColorStop(0, rgba(T.beerDeep, 0.8)); g.addColorStop(0.2, rgba(T.beerDeep, 0)); g.addColorStop(0.82, rgba(T.beerDeep, 0)); g.addColorStop(1, rgba(T.beerDeep, 0.72));
+    ctx.fillStyle = g; ctx.fill();
+    g = ctx.createRadialGradient(0.12, 0.7, 0.05, 0.12, 0.7, 1.3);   // and glows where light comes through
+    g.addColorStop(0, 'rgba(255,236,160,.4)'); g.addColorStop(1, 'rgba(255,236,160,0)');
+    ctx.fillStyle = g; ctx.fill();
+    if (haze > 0.01){ ctx.fillStyle = rgba(T.foam, haze*0.17); ctx.fill(); }
+    var depth = hasFoam ? 0.1 + haze*0.95 : haze*0.6;        // the creamy cascade under a fresh head
+    if (depth > 0.01){
+      g = ctx.createLinearGradient(gx*L.cB, gy*L.cB, gx*(L.cB + depth), gy*(L.cB + depth));
+      g.addColorStop(0, rgba(T.foam, hasFoam ? 0.5 + haze*0.35 : haze*0.5)); g.addColorStop(1, rgba(T.foam, 0));
+      ctx.fillStyle = g; ctx.fill();
+    }
+    ctx.save(); ctx.clip();
+    ctx.fillStyle = rgba(T.foamLight, 0.38); ctx.beginPath();
+    for (i = 0; i < bubbles.length; i++){ var b = bubbles[i]; ctx.moveTo(b.x + b.r, b.y); ctx.arc(b.x, b.y, b.r, 0, TAU); }
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.beginPath();
+    for (i = 0; i < bubbles.length; i++){ var q = bubbles[i]; if (q.r*u < 2.3) continue; ctx.moveTo(q.x - q.r*0.1, q.y - q.r*0.35); ctx.arc(q.x - q.r*0.35, q.y - q.r*0.35, q.r*0.28, 0, TAU); }
+    ctx.fill();
+    ctx.restore();
+    if (!hasFoam){                                           // bare beer: you can see its surface
+      lensPath(backB, frontB); ctx.fillStyle = mix(T.beerTop, '#FFF3C4', 0.35); ctx.globalAlpha = 0.9; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = px*1.2;
+      ctx.beginPath(); for (i = 3; i < 14; i++){ if (i > 3) ctx.lineTo(backB[i][0], backB[i][1] + px); else ctx.moveTo(backB[i][0], backB[i][1] + px); } ctx.stroke();
+    }
+  }
+  if (hasFoam){
+    ctx.save();
+    halfPath(backT, 1); ctx.clip();
+    if (hasBeer) halfPath(frontB, -1); else halfPath(backT, 1);
+    g = ctx.createLinearGradient(gx*(L.cT - 0.08), gy*(L.cT - 0.08), gx*(L.cB + 0.12), gy*(L.cB + 0.12));
+    g.addColorStop(0, T.foamLight); g.addColorStop(0.55, T.foam); g.addColorStop(1, T.foamShade);
+    ctx.fillStyle = g; ctx.fill();
+    ctx.save(); ctx.scale(px, px); ctx.globalAlpha = 0.6; ctx.fillStyle = foamPattern; ctx.fill(); ctx.restore();
+    g = ctx.createLinearGradient(-1.03, 0, 1.03, 0);
+    g.addColorStop(0, rgba(T.foamShade, 0.85)); g.addColorStop(0.16, rgba(T.foamShade, 0)); g.addColorStop(0.86, rgba(T.foamShade, 0)); g.addColorStop(1, rgba(T.foamShade, 0.7));
+    ctx.fillStyle = g; ctx.fill();
+    ctx.restore();
+    lensPath(backT, frontT); ctx.fillStyle = T.foamLight; ctx.fill();
+    ctx.save(); ctx.scale(px, px); ctx.globalAlpha = 0.35; ctx.fillStyle = foamPattern; ctx.fill(); ctx.restore();
+    ctx.strokeStyle = rgba(T.foamShade, 0.75); ctx.lineWidth = px*1.1;
+    ctx.beginPath(); for (i = 0; i < frontT.length; i++){ if (i) ctx.lineTo(frontT[i][0], frontT[i][1]); else ctx.moveTo(frontT[i][0], frontT[i][1]); } ctx.stroke();
+  }
+  if (splash.length){
+    for (i = 0; i < splash.length; i++){
+      var p = splash[i]; ctx.fillStyle = p.f ? T.foam : T.beerTop;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r*(1 - p.life*0.5), 0, TAU); ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+function drawGlass(now){
+  var z = P.zoom, e = P.e, px = 1/(u*z), g, i;
+  ctx.save(); ctx.translate(P.gxc, P.cy); ctx.rotate(glassAngle); ctx.scale(u*z, u*z);
+  var inner = new Path2D(INNER_P); inner.moveTo(0.93, -HH); inner.ellipse(0, -HH, 0.93, 0.93*e, 0, 0, TAU); inner.moveTo(0.6, 1.46); inner.ellipse(0, 1.46, 0.6, 0.6*e, 0, 0, TAU);
+  var outer = new Path2D(OUTER_P); outer.moveTo(0.975, -HH); outer.ellipse(0, -HH, 0.975, 0.975*e, 0, 0, TAU); outer.moveTo(0.68, 1.74); outer.ellipse(0, 1.74, 0.68, 0.68*Math.min(e, 0.065 + (e - 0.065)*0.4), 0, 0, TAU);
+
+  // through the back of the glass
+  g = ctx.createLinearGradient(-1.04, 0, 1.04, 0);
+  g.addColorStop(0, T.glassEdge); g.addColorStop(0.2, T.glassMid); g.addColorStop(0.8, T.glassMid); g.addColorStop(1, T.glassEdge);
+  ctx.fillStyle = g; ctx.fill(outer);
+  ctx.save(); ctx.clip(inner); ctx.drawImage(laceC, -1.15, -1.6, 2.3, 3.5); ctx.restore();
+  // far side of the rim
+  ctx.strokeStyle = T.glassLine; ctx.lineWidth = px*1.1;
+  ctx.beginPath(); ctx.ellipse(0, -HH, 0.952, 0.952*e, 0, Math.PI, TAU); ctx.stroke();
+
+  drawLiquid(inner, now);
+
+  // the glass itself: walls with thickness, a heavy base
+  g = ctx.createLinearGradient(-1.04, 0, 1.04, 0);
+  g.addColorStop(0, T.glassLine); g.addColorStop(0.05, T.glassEdge); g.addColorStop(0.5, T.glassMid); g.addColorStop(0.95, T.glassEdge); g.addColorStop(1, T.glassLine);
+  ctx.fillStyle = g; ctx.fill(WALL_P, 'evenodd');
+  ctx.save(); ctx.clip(WALL_P, 'evenodd');
+  var fill = clamp(beer/FULL_ML*2.2, 0, 1);
+  if (fill > 0.01){                                            // beer colours the thick base from inside
+    g = ctx.createLinearGradient(0, 1.36, 0, 1.8); g.addColorStop(0, rgba(T.beer, 0)); g.addColorStop(0.45, rgba(T.beer, 0.5*fill)); g.addColorStop(1, rgba(T.beerDeep, 0.55*fill));
+    ctx.fillStyle = g; ctx.fillRect(-1, 1.3, 2, 0.6);
+  }
+  g = ctx.createLinearGradient(0, 1.5, 0, 1.8); g.addColorStop(0, 'rgba(255,255,255,.34)'); g.addColorStop(0.28, 'rgba(255,255,255,.04)'); g.addColorStop(0.8, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,.2)');
+  ctx.fillStyle = g; ctx.fillRect(-0.72, 1.5, 1.44, 0.3);
+  ctx.restore();
+  ctx.lineJoin = 'round'; ctx.strokeStyle = T.glassLine; ctx.lineWidth = px*1.4; ctx.stroke(OUTER_P);
+  ctx.lineWidth = px*0.9; ctx.globalAlpha = 0.6; ctx.stroke(INNER_P); ctx.globalAlpha = 1;
+
+  // the calibration mark every half-litre glass carries
+  ctx.strokeStyle = T.etch; ctx.lineWidth = 0.022;
+  ctx.beginPath(); ctx.moveTo(0.48, LINE_Y); ctx.lineTo(0.8, LINE_Y); ctx.stroke();
+  ctx.save(); ctx.scale(px, px);
+  ctx.fillStyle = T.etch; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+  ctx.font = '600 ' + Math.max(9, 0.19*u*z).toFixed(1) + 'px "Barlow Semi Condensed","Arial Narrow",Arial,sans-serif';
+  ctx.fillText('0,5 l', 0.8*u*z, (LINE_Y - 0.06)*u*z);
+  ctx.restore();
+
+  // condensation on the outside
+  if (fogDirty){
+    fogOx.globalCompositeOperation = 'source-over'; fogOx.clearRect(0, 0, FW, FH);
+    fogOx.fillStyle = fogPattern; fogOx.fillRect(0, 0, FW, FH);
+    fogOx.globalCompositeOperation = 'destination-in'; fogOx.drawImage(fogM, 0, 0);
+    fogDirty = false;
+  }
+  ctx.globalAlpha = 0.6; ctx.drawImage(fogO, -1.15, -1.6, 2.3, 3.5); ctx.globalAlpha = 1;
+  var k = 32/23;
+  ctx.fillStyle = 'rgba(255,255,255,.62)';
+  for (i = 0; i < beads.length; i++){
+    var b = beads[i], rp = b.r*u*z;
+    if (rp < 2.6){ ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, TAU); ctx.fill(); continue; }
+    var sy = b.run ? 1 + Math.min(0.7, b.v*0.55) : 1;
+    ctx.drawImage(beadSprite, b.x - b.r*k, b.y - b.r*k*sy - (sy - 1)*b.r*0.4, b.r*k*2, b.r*k*2*sy);
   }
 
-  // text
-  var ml = Math.round(total);
-  if (ml !== lastMl){ lastMl = ml; elMl.textContent = ml; }
-  var st = statusText(now, upright, total);
-  if (st !== lastStatus){ lastStatus = st; elStatus.textContent = st; }
-  if (elTally.textContent !== String(count)) elTally.textContent = count;
-
-  paint(now, gx, gy, cT, cB, cMax, total);
-  requestAnimationFrame(frame);
+  // reflections, sliding a touch as the glass tilts
+  var par = clamp(glassAngle + (sensor.on ? sensor.x*0.9 : 0), -0.7, 0.7)*(calm ? 0 : 0.07);
+  function band(side, inset, width, y0, y1, alpha){
+    var a = [], c2 = [], j;
+    for (j = 0; j <= 22; j++){
+      var tt = j/22, y = lerp(y0, y1, tt), hw = 0;
+      for (var m = 1; m < INNER_HALF.length; m++){
+        if (INNER_HALF[m][1] <= y){ var p0 = INNER_HALF[m-1], p1 = INNER_HALF[m]; hw = p0[0] + (p1[0] - p0[0])*((y - p0[1])/((p1[1] - p0[1]) || 1)); break; }
+      }
+      var w = width*Math.pow(Math.sin(Math.PI*clamp(tt, 0.02, 0.98)), 0.55), x0 = hw - inset + par*side;
+      a.push([side*x0, y]); c2.push([side*(x0 - w), y]);
+    }
+    ctx.beginPath(); ctx.moveTo(a[0][0], a[0][1]);
+    for (j = 1; j < a.length; j++) ctx.lineTo(a[j][0], a[j][1]);
+    for (j = c2.length - 1; j >= 0; j--) ctx.lineTo(c2[j][0], c2[j][1]);
+    ctx.closePath(); ctx.globalAlpha = alpha; ctx.fill(); ctx.globalAlpha = 1;
+  }
+  ctx.fillStyle = T.shine;
+  band(-1, 0.085, 0.17, -1.3, 1.0, 0.1);
+  band(-1, 0.105, 0.125, -1.27, 0.95, 0.13);
+  band(-1, 0.125, 0.085, -1.23, 0.88, 0.17);
+  band(-1, 0.142, 0.05, -1.18, 0.8, 0.24);
+  band(-1, 0.155, 0.022, -1.1, 0.68, 0.34);
+  band(-1, 0.34, 0.06, -1.0, 0.25, 0.07);
+  band(-1, 0.355, 0.03, -0.95, 0.15, 0.1);
+  band(1, 0.06, 0.06, -1.18, 0.6, 0.12);
+  band(1, 0.072, 0.03, -1.12, 0.5, 0.26);
+  band(1, 0.2, 0.1, -0.9, 0.9, 0.06);
+  // near side of the rim, with a glint
+  ctx.strokeStyle = T.glassLine; ctx.lineWidth = px*1.3;
+  ctx.beginPath(); ctx.ellipse(0, -HH, 0.975, 0.975*e, 0, 0, Math.PI); ctx.stroke();
+  ctx.strokeStyle = T.shine; ctx.lineWidth = px*2; ctx.lineCap = 'round'; ctx.globalAlpha = 0.85;
+  ctx.beginPath(); ctx.ellipse(0, -HH, 0.955, 0.955*e, 0, Math.PI*0.62, Math.PI*0.84); ctx.stroke();
+  ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.ellipse(0, -HH, 0.955, 0.955*e, 0, Math.PI*0.12, Math.PI*0.2); ctx.stroke();
+  ctx.globalAlpha = 1;
+  ctx.restore();
 }
-
-function paint(now, gx, gy, cT, cB, cMax, total){
+function drawSpill(){
+  if (spillVis < 0.03 || Math.abs(liq) < 0.2) return;
+  var side = liq > 0 ? 1 : -1, rx = side*0.95, ry = -HH, z = P.zoom;
+  var sa = Math.sin(glassAngle), ca = Math.cos(glassAngle);
+  var x0 = P.gxc + (rx*ca - ry*sa)*u*z, y0 = P.cy + (rx*sa + ry*ca)*u*z;
+  var gvx = sensor.on ? sensor.x : 0, gvy = sensor.on ? sensor.y : 1;
+  var speed = (1.1 + 2.2*spillVis)*u, vx = ca*side*speed, vy = sa*side*speed, n = 18, T1 = 0.3;
+  var col = mix(T.beer, T.foam, clamp(spillFoam, 0, 1)*0.85), c = hexRGB(T.beer), cf = hexRGB(T.foam), f = clamp(spillFoam, 0, 1)*0.85;
+  var rC = Math.round(lerp(c[0], cf[0], f)), gC = Math.round(lerp(c[1], cf[1], f)), bC = Math.round(lerp(c[2], cf[2], f));
+  ctx.lineCap = 'round';
+  var px = x0, py = y0;
+  for (var i = 1; i <= n; i++){
+    var t = T1*i/n, x = x0 + vx*t + 0.5*gvx*G*0.55*u*t*t, y = y0 + vy*t + 0.5*gvy*G*0.55*u*t*t;
+    var w = u*(0.04 + 0.15*Math.min(1, spillVis))*(1 - 0.6*i/n), a = i/n < 0.35 ? 1 : Math.pow(1 - (i/n - 0.35)/0.65, 1.5);
+    ctx.strokeStyle = 'rgba(' + rC + ',' + gC + ',' + bC + ',' + a.toFixed(3) + ')'; ctx.lineWidth = w;
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(x, y); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,' + (0.4*a).toFixed(3) + ')'; ctx.lineWidth = w*0.16;
+    ctx.beginPath(); ctx.moveTo(px - w*0.22, py); ctx.lineTo(x - w*0.22, y); ctx.stroke();
+    px = x; py = y;
+  }
+  void col;
+}
+function paint(now){
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, W, H);
+  var g, z = P.zoom, grounded = 1 - clamp(P.lift*1.6, 0, 0.85);
 
-  // the bar top
-  ctx.fillStyle = T.bar; ctx.fillRect(0, barY, W, H - barY + 1);
-  ctx.fillStyle = T.barEdge; ctx.fillRect(0, barY, W, Math.max(2, u*0.05));
+  // light on the wall behind the glass
+  g = ctx.createRadialGradient(cx, baseY - 2.1*u, u*0.2, cx, baseY - 2.1*u, u*3.3);
+  g.addColorStop(0, T.glow); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-  // the glass pivots on its foot and lifts a little as it tips
-  var sa = Math.sin(glassAngle), ca = Math.cos(glassAngle), low = -Infinity;
-  for (var i = 0; i < FOOT.length; i++){ var yy = FOOT[i][0]*sa + FOOT[i][1]*ca; if (yy > low) low = yy; }
-  var cy = cyRest - (low - 1.69)*u - 0.3*u*Math.min(1, Math.abs(glassAngle)*1.4);
-
-  var gxc = cx - Math.sin(glassAngle)*0.75*u;   // lean away so the rim stays on screen
+  // the bar top, seen almost edge on
+  g = ctx.createLinearGradient(0, barY, 0, H); g.addColorStop(0, T.barHi); g.addColorStop(0.5, T.bar); g.addColorStop(1, T.bar);
+  ctx.fillStyle = g; ctx.fillRect(0, barY, W, H - barY + 1);
+  ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.fillRect(0, barY, W, Math.max(1, u*0.018));
+  // contact shadow, and the amber light a full glass throws on the wood
+  ctx.save(); ctx.beginPath(); ctx.rect(0, barY, W, H - barY + 1); ctx.clip();
+  ctx.translate(P.gxc, baseY + 0.02*u); ctx.scale(1, 0.14);
+  g = ctx.createRadialGradient(0, 0, u*0.2, 0, 0, u*(1.15 + P.lift*0.8));
+  g.addColorStop(0, T.shadow); g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.globalAlpha = grounded; ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, u*2.2, 0, TAU); ctx.fill();
+  var lit = clamp(beer/380, 0, 1);
+  if (lit > 0.02){
+    g = ctx.createRadialGradient(u*0.42, u*0.5, 0, u*0.42, u*0.5, u*1.25);
+    g.addColorStop(0, rgba(T.beerTop, 0.55*lit)); g.addColorStop(1, rgba(T.beerTop, 0));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(u*0.42, u*0.5, u*1.25, 0, TAU); ctx.fill();
+  }
+  ctx.restore(); ctx.globalAlpha = 1;
 
   drawTap();
+  drawStreams(now);
+  drawGlass(now);
+  drawSpill();
+  void z;
+}
 
-  // stream from the tap
-  if (flow > 0.02){
-    var endY = (total > 2 ? cy + (cT/Math.max(0.3, gy))*u : cy + HH*u) + 0.05*u;
-    var sw = (0.09 + 0.012*Math.sin(now*0.02))*u*flow;
-    ctx.fillStyle = T.beer; ctx.fillRect(cx - sw, spoutY - 1, 2*sw, Math.max(0, endY - spoutY));
-    ctx.fillStyle = hexA(T.foam, 0.55); ctx.fillRect(cx - sw*0.55, spoutY - 1, sw*0.4, Math.max(0, endY - spoutY));
-  }
+/* =====================================================================
+   Frame loop
+   ===================================================================== */
+function statusText(now, upright, total){
+  if (pourHeld && !upright) return sensor.on ? 'Stand your phone up to pour.' : 'Let the glass stand before you pour.';
+  if (pourHeld && total >= FULL_ML - 3) return 'Brim-full. The rest goes on the bar.';
+  if (pourHeld) return 'Pouring…';
+  if (spillVis > 0.1 || (drinkHeld && total > 1)) return 'Down it goes.';
+  if (now - doneAt < 3500) return 'Empty. That was pint number ' + count + '.';
+  if (total < 1) return 'Empty glass. Hold the tap to fill it.';
+  if (!wipedOnce && fogAmt > 0.5 && now < hintUntil) return 'The glass is cold. Wipe it with your finger.';
+  var how = sensor.on ? 'Tip your phone back to drink.' : 'Hold the drink button to sip.';
+  return total >= LINE_ML - 5 ? 'Full to the line. ' + how : how;
+}
+function frame(now){
+  var real = Math.min(0.1, Math.max(0, (now - lastT)/1000)); lastT = now;
+  acc += real;
+  var res = { upright:true, hit:0, out:0 }, steps = 0;
 
-  ctx.save();
-  ctx.translate(gxc, cy); ctx.rotate(glassAngle); ctx.scale(u, u);
+  // where the stream lands, from the last painted pose
+  var surfY = (beer + foam > 2 && L.chT) ? L.cT/Math.max(0.5, L.gy) : HH;
+  streamD = clamp((P.cy + surfY*u*P.zoom - spoutY)/u, 0.3, 5);
 
-  trace(POLY, true); ctx.fillStyle = T.glassFill; ctx.fill();
+  while (acc >= DT && steps < 8){ res = step(DT, now); acc -= DT; steps++; }
+  if (steps === 8) acc = 0;
+  computeLevels();
 
-  if (total > 0.5){
-    var pT = clip(POLY, gx, gy, cT), pB = clip(POLY, gx, gy, cB);
-    if (pB.length > 2){
-      var grad = ctx.createLinearGradient(gx*cB, gy*cB, gx*cMax, gy*cMax);
-      grad.addColorStop(0, T.beer); grad.addColorStop(1, T.beerDeep);
-      trace(pB, true); ctx.fillStyle = grad; ctx.fill();
-      ctx.save(); ctx.clip();
-      ctx.fillStyle = hexA(T.foam, 0.6);
-      for (var b = 0; b < bubbles.length; b++){
-        ctx.beginPath(); ctx.arc(bubbles[b].x, bubbles[b].y, bubbles[b].r, 0, 6.2832); ctx.fill();
-      }
-      ctx.restore();
+  // pose of the glass on screen
+  var sa = Math.sin(glassAngle), ca = Math.cos(glassAngle), low = -1e9;
+  for (var i = 0; i < FOOT.length; i++){ var yy = FOOT[i][0]*sa + FOOT[i][1]*ca; if (yy > low) low = yy; }
+  var raise = Math.sin(pitchTot);
+  P.zoom = 1 + 0.04*raise;
+  P.e = 0.065 + 0.26*Math.pow(raise, 1.2);
+  P.lift = (low - 1.78) + 0.3*Math.min(1, Math.abs(glassAngle)*1.4);
+  P.gxc = cx + sa*0.12*u;
+  P.cy = baseY - 1.78*u*P.zoom - P.lift*u;
+
+  if (fogSeed){ fogSeed = false; seedCold(); }
+
+  // pour side effects that only need doing once a frame
+  var gx = L.gx, gy = L.gy;
+  if (res.hit > 0 && L.chT){
+    while (bubAcc >= 1){
+      bubAcc -= 1;
+      var d0 = L.cB + 0.04 + Math.random()*0.1, sx = (Math.random() - 0.5)*0.14;
+      addBubble(gx*d0 + gy*sx, gy*d0 - gx*sx, gx*(1.4 + Math.random()*2.2) + gy*(Math.random() - 0.5)*1.5, gy*(1.4 + Math.random()*2.2) - gx*(Math.random() - 0.5)*1.5, 0.005 + Math.random()*0.011);
     }
-    var thick = cB - cT;
-    if (thick > 0.004 && pT.length > 2){
-      var pF = clip(pT, -gx, -gy, -cB);
-      ctx.fillStyle = T.foam;
-      if (pF.length > 2){ trace(pF, true); ctx.fill(); }
-      // a frothy edge along the top of the head
-      var ends = [];
-      for (var j = 0; j < pT.length; j++){ if (Math.abs(pT[j][0]*gx + pT[j][1]*gy - cT) < 1e-4) ends.push(pT[j]); }
-      if (ends.length >= 2){
-        var A = ends[0], B = ends[ends.length - 1];
-        var len = Math.hypot(B[0]-A[0], B[1]-A[1]), n = Math.max(2, Math.ceil(len/0.17));
-        var rr = Math.min(0.1, thick*0.9);
-        ctx.save(); trace(POLY, true); ctx.clip();
-        for (var q = 0; q <= n; q++){
-          var t = q/n, r2 = rr*(0.78 + 0.22*Math.sin(q*2.3 + now*0.0016));
-          ctx.beginPath();
-          ctx.arc(A[0] + (B[0]-A[0])*t + gx*r2*0.35, A[1] + (B[1]-A[1])*t + gy*r2*0.35, r2, 0, 6.2832);
-          ctx.fill();
-        }
-        ctx.restore();
-      }
+    while (splashAcc >= 1 && splash.length < 60){
+      splashAcc -= 1;
+      var up = 1.2 + Math.random()*2.6, sd = (Math.random() - 0.5)*2.4, c0 = L.cT - 0.02;
+      splash.push({ x:gx*c0 + gy*(Math.random() - 0.5)*0.1, y:gy*c0 - gx*(Math.random() - 0.5)*0.1, vx:-gx*up + gy*sd, vy:-gy*up - gx*sd, r:0.012 + Math.random()*0.02, life:0, f:foam > 8 && Math.random() < 0.6 });
+    }
+  } else { bubAcc = Math.min(bubAcc, 1); splashAcc = Math.min(splashAcc, 1); }
+  stepBubbles(real);
+
+  // drips from the spout after the tap closes
+  for (var k = drips.length - 1; k >= 0; k--){
+    var d = drips[k];
+    if (!d.fall){
+      d.wait -= real;
+      if (d.wait < 0.32) d.r = 0.05*clamp(1 - d.wait/0.32, 0, 1);
+      if (d.wait <= 0){ d.fall = true; d.y = 0.05; d.vy = 0.4; }
+    } else {
+      d.vy += G*real; d.y += d.vy*real;
+      if (d.y >= streamD){ if (res.upright){ beer += 0.4; waveKick(L.chT ? (0 - L.chT[0])/(L.chT[1] - L.chT[0]) : 0.5, -0.5, 1.2); } drips.splice(k, 1); }
     }
   }
 
-  // the glass itself
-  trace(BASE, true); ctx.fillStyle = T.glassFill; ctx.fill();
-  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-  ctx.strokeStyle = T.glass; ctx.lineWidth = 0.07;
-  trace(BASE, true); ctx.stroke();
-  trace(POLY, false); ctx.stroke();
-  ctx.strokeStyle = T.shine; ctx.lineWidth = 0.065;
-  ctx.beginPath(); ctx.moveTo(-0.76, -1.0); ctx.lineTo(-0.78, 0.15); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(-0.72, 0.5); ctx.lineTo(-0.67, 0.85); ctx.stroke();
-  // the calibration mark every half-litre glass carries
-  ctx.strokeStyle = T.etch; ctx.lineWidth = 0.028;
-  ctx.beginPath(); ctx.moveTo(0.46, LINE_Y); ctx.lineTo(0.82, LINE_Y); ctx.stroke();
-  ctx.save(); ctx.scale(1/u, 1/u);
-  ctx.fillStyle = T.etch; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
-  ctx.font = '600 ' + Math.max(9, 0.2*u).toFixed(1) + 'px "Barlow Semi Condensed","Arial Narrow",Arial,sans-serif';
-  ctx.fillText('0,5 l', 0.82*u, (LINE_Y - 0.07)*u);
-  ctx.restore();
-  ctx.restore();
-
-  // beer leaving over the lower rim
-  if (spillVis > 0.03 && Math.abs(liq) > 0.2){
-    var side = liq > 0 ? 1 : -1, rim = side > 0 ? RIM_R : RIM_L;
-    var px = gxc + (rim[0]*ca - rim[1]*sa)*u, py = cy + (rim[0]*sa + rim[1]*ca)*u;
-    var vx = sensor.on ? Math.sin(planeAngle) : 0, vy = sensor.on ? Math.cos(planeAngle) : 1;
-    var ox = ca*side, oy = sa*side, L = 1.9*u;
-    var sg = ctx.createLinearGradient(px, py, px + vx*L, py + vy*L);
-    sg.addColorStop(0, T.beer); sg.addColorStop(0.55, hexA(T.beer, 0.85)); sg.addColorStop(1, hexA(T.beer, 0));
-    ctx.strokeStyle = sg; ctx.lineCap = 'round'; ctx.lineWidth = u*(0.05 + 0.16*Math.min(1, spillVis));
-    ctx.beginPath(); ctx.moveTo(px, py);
-    ctx.quadraticCurveTo(px + ox*0.3*u, py + oy*0.3*u, px + ox*0.42*u + vx*L, py + oy*0.42*u + vy*L);
-    ctx.stroke();
+  // lacing: foam left on the glass as the level falls
+  if (foam > 6 && L.chT && L.laceAt != null && L.cT > L.laceAt + 0.02){
+    var n = 12 + (Math.random()*8)|0, s0 = L.chT[0], s1 = L.chT[1];
+    laceX.fillStyle = rgba(T.foam, 1);
+    laceX.strokeStyle = rgba(T.foam, 0.1*clamp(foam/45, 0.2, 1)); laceX.lineWidth = Math.max(1, fs*0.009);
+    laceX.beginPath(); laceX.moveTo(fX(gx*L.laceAt + gy*s0), fY(gy*L.laceAt - gx*s0)); laceX.lineTo(fX(gx*L.laceAt + gy*s1), fY(gy*L.laceAt - gx*s1)); laceX.stroke();
+    for (var q = 0; q < n; q++){
+      var h = Math.random(), xi = Math.random() < 0.5 ? h*h*0.5 : 1 - h*h*0.5, s = lerp(s0, s1, xi), dd = L.laceAt + (Math.random() - 0.5)*0.035;
+      laceX.globalAlpha = clamp(foam/45, 0.2, 1)*(0.1 + Math.random()*0.26);
+      laceX.beginPath(); laceX.ellipse(fX(gx*dd + gy*s), fY(gy*dd - gx*s), fs*(0.008 + Math.random()*0.03), fs*(0.005 + Math.random()*0.011), Math.atan2(-gx, gy) + (Math.random() - 0.5)*0.5, 0, TAU); laceX.fill();
+    }
+    laceX.globalAlpha = 1; L.laceAt = L.cT;
   }
+  if (L.laceAt == null || L.cT < L.laceAt) L.laceAt = L.cT;
+  laceClock += real;
+  if (laceClock > 0.8){
+    laceClock = 0; laceX.save(); laceX.globalCompositeOperation = 'destination-out';
+    laceX.fillStyle = 'rgba(0,0,0,.05)'; laceX.fillRect(0, 0, FW, FH);
+    if (beer > 2){                                            // beer washes it off again
+      laceX.fillStyle = 'rgba(0,0,0,.5)'; laceX.beginPath();
+      var c1 = L.cB + 0.03, tx = gy, ty = -gx;
+      laceX.moveTo(fX(gx*c1 - tx*3), fY(gy*c1 - ty*3)); laceX.lineTo(fX(gx*c1 + tx*3), fY(gy*c1 + ty*3));
+      laceX.lineTo(fX(gx*(c1 + 6) + tx*3), fY(gy*(c1 + 6) + ty*3)); laceX.lineTo(fX(gx*(c1 + 6) - tx*3), fY(gy*(c1 + 6) - ty*3)); laceX.closePath(); laceX.fill();
+    }
+    laceX.restore();
+  }
+
+  // condensation
+  fogClock += real;
+  if (fogClock > 0.09){ fogClock = 0; fogTick(0.017); }
+  stepBeads(real);
+
+  // read-outs, eased so the numbers never jump
+  var total = beer + foam;
+  mlSmooth += (total - mlSmooth)*ease(real, 14);
+  var ml = Math.round(mlSmooth);
+  if (ml !== shownMl){ shownMl = ml; elMl.textContent = ml; }
+  var st = statusText(now, res.upright, total);
+  if (st !== pendStatus){ pendStatus = st; pendAt = now; }
+  if (pendStatus !== lastStatus && (now - pendAt > 260 || lastStatus === '')){ lastStatus = pendStatus; elStatus.textContent = pendStatus; }
+  if (elTally.textContent !== String(count)) elTally.textContent = count;
+
+  paint(now);
+  requestAnimationFrame(frame);
 }
 
 /* ---------- boot ---------- */
 function start(data){
   if (data && typeof data.beer === 'number'){ beer = data.beer; foam = data.foam || 0; }
-  peak = beer + foam;
+  peak = beer + foam; mlSmooth = peak;
   elTally.textContent = count;
-  lastT = performance.now();
+  computeLevels();
+  P.gxc = cx; P.cy = baseY - 1.78*u; P.zoom = 1;
+  lastT = performance.now(); hintUntil = lastT + 14000;
   requestAnimationFrame(frame);
 }
 var hot = window.claude && window.claude.hot;
