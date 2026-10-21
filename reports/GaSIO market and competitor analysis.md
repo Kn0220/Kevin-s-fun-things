@@ -114,7 +114,11 @@ Three things follow from the sizing. First, **boiler retrofits are the largest V
 
 ## Sixteen claims that undermine credibility, and how to fix them
 
-These are the numbers a funder, carbon auditor or CCA reviewer will check first. Each is a company claim from the CCS materials or the Oxfam/CCS brochure unless noted. Most fixes are low-cost, and the credibility gain is large.
+These are the numbers a funder, carbon auditor or CCA reviewer will check first. Each is a company claim from the CCS materials or the Oxfam/CCS brochure unless noted. Most fixes are low-cost, and the credibility gain is large. A later, fuller line-by-line check of all eight PDFs (33 claims, with the calculations and a question list for CCS) is kept in a separate fact-check document. It adds four findings not in this table:
+- "Over 1.7 million t CO2/yr" from Vietnamese fossil fuels is about 200x too low.
+- The green-tea unit's CO2 is given as about 1.5 t lifetime in the overview but 12 t/yr in its flyer.
+- The tea unit's tested durability (25.2 months minimum) conflicts with its claimed 10-year life.
+- IPCC defaults put rice-husk gasifier char at only about 0.3–0.5 kg CO2 stored per kg.
 
 | # | Claim in our materials | Problem | Recommended fix |
 |---|---|---|---|
@@ -133,7 +137,7 @@ These are the numbers a funder, carbon auditor or CCA reviewer will check first.
 | 13 | "**No toxic substances produced**" | Tier 4 PM2.5 and Tier 5 CO mean low, not zero, emissions; the claim invites regulatory and reputational challenge under QCVN 19:2024 ([MONRE](https://monre.gov.vn/noidung/Lists/VBQPPL/Attachments/519/QCVN%20Khi%20thai%20cong%20nghiep_Signed.pdf)) | "Emissions meet ISO 19867 Tier 4–5 (household); stack test to QCVN 19:2024 (industrial)" |
 | 14 | Industrial efficiency **73%** (ccs.org.vn) vs **75%** (MOIT/DANIDA, ccspin.org) | Minor, but signals no single test record ([ccs.org.vn](https://ccs.org.vn/cong-nghe-va-san-pham/chi-tiet/cong-nghe-khi-hoa-sinh-khoi-lien-tuc-theo-the-tich-vcbg); [ccspin.org](https://ccspin.org/index.php/vi/hoa-t-a-ng/ca-ng-ngha-i/267-cong-ngh-1)) | Cite one measured value with test date and site |
 | 15 | Patents listed without numbers; "Danish **patent**"; "most advanced gasification technology available today" | Unverifiable; DK right may be an unexamined utility model; superlative is contradicted by prior art; "Volumetric" vs "Vertical" in partner documents ([NGO Centre](https://ngocentre.org.vn/vi/node/55482)) | List certificate numbers, type, status and holder; drop the superlative; standardise the acronym |
-| 16 | Air-pollution deaths framed as household-only (~60,000/yr, per the market research notes) | WHO figures of 60,000–70,000 cover all air pollution, ambient plus household ([WHO Vietnam](https://www.who.int/vietnam/health-topics/air-pollution)) | "60,000–70,000 air-pollution deaths/yr, with household solid fuel a major contributor" |
+| 16 | "~60,000 deaths/yr in Vietnam from air pollution", placed directly under the kitchen-smoke statistic (flyers) | The wording itself is accurate: WHO's 60,000–70,000 covers all air pollution, ambient plus household ([WHO Vietnam](https://www.who.int/vietnam/health-topics/air-pollution)). The placement makes it read as household-only. The global figure beside it ("2 million deaths/yr from kitchen smoke") is outdated: WHO now gives 2.9 million for 2021 ([WHO](https://www.who.int/en/news-room/fact-sheets/detail/household-air-pollution-and-health)) | Keep the Vietnam wording exact; update the global figure to 2.9 million (2021) |
 
 Two other figures checked out and are worth keeping. "2,800 t CO2/yr for a 1,000 t/yr coal-fired black-tea line" is consistent with 0.6–1.2 kg coal per kg dried black tea ([CIGR review](https://cigrjournal.org/index.php/Ejounral/article/download/5048/2902/22934)): at a typical ~2.4–2.6 t CO2 per t coal (an engineering assumption), that implies 1,500–3,000 t CO2. "Boils 1 L in 2 min" implies about 2.6 kW of net heat to water, plausible at the top of a 1–6 kW range. The 12 t CO2/yr claim per tea unit, on 11 t of biomass, needs its baseline spelled out, because displacing partly renewable firewood earns far less than displacing coal or LPG.
 
